@@ -10,6 +10,9 @@ import (
 func main() {
 	r := httprouter.New()
 	// r.NotFound = http.FileServer(http.Dir("assets/index.html")).ServeHTTP
+	r.NotFound = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "assets/index.html")
+	})
 	r.GET("/", homeHandler)
 	r.GET("/posts", postsIndexHandler)
 	r.POST("/posts", postsCreateHandler)
