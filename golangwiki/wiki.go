@@ -25,6 +25,7 @@ func main() {
 	http.HandleFunc("/view/", makeHandler(viewHandler))
 	http.HandleFunc("/edit/", makeHandler(editHandler))
 	http.HandleFunc("/save/", makeHandler(saveHandler))
+	http.HandleFunc("/", frontPageHandler)
 	http.ListenAndServe(":8989", nil)
 }
 
@@ -51,6 +52,11 @@ func makeHandler(fn func(http.ResponseWriter, *http.Request, string)) http.Handl
 		}
 		fn(w, r, m[2])
 	}
+}
+
+func frontPageHandler(w http.ResponseWriter, r *http.Request) {
+	http.Redirect(w, r, "/view/FrontPage", http.StatusFound)
+	return
 }
 
 func editHandler(w http.ResponseWriter, r *http.Request, title string) {
