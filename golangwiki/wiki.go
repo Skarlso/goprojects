@@ -12,7 +12,7 @@ import (
 //Page represents a Page
 type Page struct {
 	Title string
-	Body  []byte
+	Body  template.HTML
 }
 
 const (
@@ -20,7 +20,7 @@ const (
 	dataDir = "data/"
 )
 
-var templates = template.Must(template.ParseFiles(tmpDir+"edit.html", tmpDir+"view.html"))
+var templates = template.Must(template.ParseGlob("tmp/*"))
 var validPath = regexp.MustCompile("^/(edit|save|view)/([a-zA-Z0-9]+)$")
 
 func main() {
@@ -37,7 +37,7 @@ func main() {
 func (p *Page) save() error {
 	filename := p.Title + ".txt"
 	log.Printf("Saving Page: %s", filename)
-	return ioutil.WriteFile(dataDir+filename, p.Body, 0600)
+	return ioutil.WriteFile(dataDir+filename, []byte(p.Body), 0600)
 }
 
 func loadPage(title string) (*Page, error) {
@@ -47,7 +47,7 @@ func loadPage(title string) (*Page, error) {
 	if err != nil {
 		return nil, err
 	}
-	return &Page{Title: title, Body: body}, nil
+	return &Page{Title: title, Body: template.HTML(body)}, nil
 }
 
 func makeHandler(fn func(http.ResponseWriter, *http.Request, string)) http.HandlerFunc {
@@ -87,8 +87,11 @@ func viewHandler(w http.ResponseWriter, r *http.Request, title string) {
 }
 
 func saveHandler(w http.ResponseWriter, r *http.Request, title string) {
+	var interLink = regexp.MustCompile(`\[(\w+)\]`)
 	body := r.FormValue("body")
-	p := &Page{Title: title, Body: []byte(body)}
+	body = interLink.ReplaceAllString(body, "<a href=\"/view/$1\">Link to Page $1</a>")
+	body = template.HTMLEscapeString(body)
+	p := &Page{Title: title, Body: template.HTML(body)}
 	err := p.save()
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
