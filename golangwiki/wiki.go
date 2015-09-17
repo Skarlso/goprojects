@@ -27,8 +27,8 @@ func main() {
 	http.HandleFunc("/view/", makeHandler(viewHandler))
 	http.HandleFunc("/edit/", makeHandler(editHandler))
 	http.HandleFunc("/save/", makeHandler(saveHandler))
-	http.Handle("/view/css/", http.StripPrefix("/view/css", http.FileServer(http.Dir("tmp/css"))))
-	http.Handle("/view/img/", http.StripPrefix("/view/img", http.FileServer(http.Dir("tmp/img"))))
+	http.Handle("/view/css/", http.StripPrefix("/view/css", http.FileServer(http.Dir("./css"))))
+	http.Handle("/view/img/", http.StripPrefix("/view/img", http.FileServer(http.Dir("./img"))))
 	http.HandleFunc("/", frontPageHandler)
 	log.Printf("Starting server to listen on port: 8989...")
 	http.ListenAndServe(":8989", nil)
@@ -90,7 +90,7 @@ func saveHandler(w http.ResponseWriter, r *http.Request, title string) {
 	var interLink = regexp.MustCompile(`\[(\w+)\]`)
 	body := r.FormValue("body")
 	body = interLink.ReplaceAllString(body, "<a href=\"/view/$1\">Link to Page $1</a>")
-	body = template.HTMLEscapeString(body)
+	// body = template.HTMLEscapeString(body)
 	p := &Page{Title: title, Body: template.HTML(body)}
 	err := p.save()
 	if err != nil {
