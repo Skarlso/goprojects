@@ -41,31 +41,37 @@ func (r MyReactor) CreateInput(value int) InputCell {
 // based on one other cell. The compute function will only be called
 // if the value of the passed cell changes.
 func (r *MyReactor) CreateCompute1(cell Cell, computeF func(int) int) ComputeCell {
-	myComputeCell1 := MyComputeCell{}
-	myComputeCell1.callBacks = make(map[CallbackHandle]func(int))
-	myComputeCell1.computeFunction = computeF
-	myComputeCell1.value = computeF(cell.Value())
-	connections1 := append(r.connections1[cell], &myComputeCell1)
-	r.connections1[cell] = connections1
-	myComputeCell1.reactor = *r
-	return &myComputeCell1
+	return r.ProxyCompute([]Cell{cell}, computeF)
 }
 
-// CreateCompute2 is like CreateCompute1, but depending on two cells.
+// CreateCompute2 is like CreateCompute1, but depending on two cells
 // The compute function will only be called if the value of any of the
 // passed cells changes.
 func (r *MyReactor) CreateCompute2(cell1 Cell, cell2 Cell, computeF func(int, int) int) ComputeCell {
-	myComputeCell2 := MyComputeCell{}
-	myComputeCell2.callBacks = make(map[CallbackHandle]func(int))
-	myComputeCell2.computeFunction = computeF
-	myComputeCell2.value = computeF(cell1.Value(), cell2.Value())
-	myComputeCell2.dependsOn = []Cell{cell1, cell2}
-	connectionsCell1 := append(r.connections2[cell1], &myComputeCell2)
-	connectionsCell2 := append(r.connections2[cell2], &myComputeCell2)
-	r.connections2[cell1] = connectionsCell1
-	r.connections2[cell2] = connectionsCell2
-	myComputeCell2.reactor = *r
-	return &myComputeCell2
+	return r.ProxyCompute([]Cell{cell1, cell2}, computeF)
+}
+
+//ProxyCompute a proxy to get the compute functions together
+func (r *MyReactor) ProxyCompute(cell []Cell, computeF interface{}) ComputeCell {
+	myComputeCell := MyComputeCell{}
+	myComputeCell.callBacks = make(map[CallbackHandle]func(int))
+	myComputeCell.computeFunction = computeF
+	if len(cell) < 2 {
+		myComputeCell.value = computeF.(func(int) int)(cell[0].Value())
+		connections1 := append(r.connections1[cell[0]], &myComputeCell)
+		r.connections1[cell[0]] = connections1
+	} else {
+		myComputeCell.value = computeF.(func(int, int) int)(cell[0].Value(), cell[1].Value())
+		myComputeCell.dependsOn = []Cell{cell[0], cell[1]}
+		connectionsCell1 := append(r.connections2[cell[0]], &myComputeCell)
+		connectionsCell2 := append(r.connections2[cell[1]], &myComputeCell)
+		r.connections2[cell[0]] = connectionsCell1
+		r.connections2[cell[1]] = connectionsCell2
+	}
+
+	myComputeCell.reactor = *r
+	return &myComputeCell
+
 }
 
 /*
