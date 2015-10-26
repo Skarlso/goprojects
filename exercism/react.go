@@ -1,7 +1,5 @@
 package react
 
-import "fmt"
-
 //TestVersion testVersion
 const TestVersion = 1
 
@@ -9,115 +7,135 @@ const TestVersion = 1
 
 //MyInputCell my input cell
 type MyInputCell struct {
-	value         int
-	computeCells1 []*MyComputeCell
-	reactor       MyReactor
+	value   int
+	reactor MyReactor
 }
 
 //MyComputeCell my input cell
 type MyComputeCell struct {
+	callBacks       map[CallbackHandle]func(int)
+	computeFunction interface{}
+	value           int
+	dependsOn       []Cell
 	reactor         MyReactor
-	callBacks       map[CallbackHandle]func(int)
-	computeFunction func(int) int
-	value           int
-}
-
-//MyComputeCell2 my input cell - Duplicated for now so I don't have to deal with it.
-type MyComputeCell2 struct {
-	callBacks       map[CallbackHandle]func(int)
-	computeFunction func(int, int) int
-	value           int
 }
 
 //MyReactor my reactor
 type MyReactor struct {
-	connections map[Cell][]MyComputeCell
+	connections1 map[Cell][]*MyComputeCell
+	connections2 map[Cell][]*MyComputeCell
 }
 
-//Implementation of the interfaces
+/*
+*
+* REACTOR IMPLEMENTATIONS
+*
+ */
 
-//Value returns the value of my input cell
+//CreateInput creates input cell
+func (r MyReactor) CreateInput(value int) InputCell {
+	return &MyInputCell{value: value, reactor: r}
+}
+
+// CreateCompute1 creates a compute cell which computes its value
+// based on one other cell. The compute function will only be called
+// if the value of the passed cell changes.
+func (r *MyReactor) CreateCompute1(cell Cell, computeF func(int) int) ComputeCell {
+	myComputeCell1 := MyComputeCell{}
+	myComputeCell1.callBacks = make(map[CallbackHandle]func(int))
+	myComputeCell1.computeFunction = computeF
+	myComputeCell1.value = computeF(cell.Value())
+	connections1 := append(r.connections1[cell], &myComputeCell1)
+	r.connections1[cell] = connections1
+	myComputeCell1.reactor = *r
+	return &myComputeCell1
+}
+
+// CreateCompute2 is like CreateCompute1, but depending on two cells.
+// The compute function will only be called if the value of any of the
+// passed cells changes.
+func (r *MyReactor) CreateCompute2(cell1 Cell, cell2 Cell, computeF func(int, int) int) ComputeCell {
+	myComputeCell2 := MyComputeCell{}
+	myComputeCell2.callBacks = make(map[CallbackHandle]func(int))
+	myComputeCell2.computeFunction = computeF
+	myComputeCell2.value = computeF(cell1.Value(), cell2.Value())
+	myComputeCell2.dependsOn = []Cell{cell1, cell2}
+	connectionsCell1 := append(r.connections2[cell1], &myComputeCell2)
+	connectionsCell2 := append(r.connections2[cell2], &myComputeCell2)
+	r.connections2[cell1] = connectionsCell1
+	r.connections2[cell2] = connectionsCell2
+	myComputeCell2.reactor = *r
+	return &myComputeCell2
+}
+
+/*
+*
+* INPUT CELL IMPLEMENTATIONS
+*
+ */
+
+//SetValue sets the value of an input cell
+func (ci *MyInputCell) SetValue(value int) {
+	if ci.value == value {
+		return
+	}
+	ci.value = value
+	for _, v := range ci.reactor.connections1[ci] {
+		computedValue := v.computeFunction.(func(int) int)(ci.value)
+		if v.value != computedValue {
+			v.value = computedValue
+			for _, callBack := range v.callBacks {
+				callBack(v.value)
+			}
+		}
+		if dependingComputeCells, ok := ci.reactor.connections2[v]; ok {
+			for _, dcc := range dependingComputeCells {
+				depValue := dcc.computeFunction.(func(int, int) int)(dcc.dependsOn[0].Value(), dcc.dependsOn[1].Value())
+				if dcc.value != depValue {
+					dcc.value = depValue
+					for _, dcCallBack := range dcc.callBacks {
+						dcCallBack(dcc.value)
+					}
+				}
+			}
+		}
+	}
+}
+
+//Value return value
 func (ci MyInputCell) Value() int {
 	return ci.value
 }
 
-//SetValue sets a value for an input cell
-func (ci *MyInputCell) SetValue(value int) {
-	fmt.Println("Setting InputCell value too: ", value)
-	fmt.Println("Current InputCell value is: ", ci.Value())
-	if value == ci.Value() {
-		return
-	}
-	ci.value = value
-	ci.NotifyComputeCells()
-}
+/*
+*
+* COMPUTE1 CELL IMPLEMENTATIONS
+*
+ */
 
-//NotifyComputeCells notifies all listening cells
-func (ci *MyInputCell) NotifyComputeCells() {
-	//If value changed, notify all cells
-	for _, computeCells := range ci.reactor.connections[ci] {
-		computeCells.value = computeCells.computeFunction(ci.Value())
-	}
-}
-
-//Value returns the value of my input cell
-func (cc MyComputeCell) Value() int {
-	return cc.value
-}
-
-//AddCallback adds a call back handle
+//AddCallback sets the value of an input cell
 func (cc *MyComputeCell) AddCallback(callBack func(int)) CallbackHandle {
 	cc.callBacks[&callBack] = callBack
 	return &callBack
 }
 
-//RemoveCallback adds a call back handle
-func (cc *MyComputeCell) RemoveCallback(callBackHandle CallbackHandle) {
-	delete(cc.callBacks, callBackHandle)
+//RemoveCallback sets the value of an input cell
+func (cc *MyComputeCell) RemoveCallback(callBack CallbackHandle) {
+	delete(cc.callBacks, callBack)
 }
 
-//Value returns the value of my input cell - Duplicated For Now
-func (cc MyComputeCell2) Value() int {
+//Value returns value
+func (cc MyComputeCell) Value() int {
 	return cc.value
 }
 
-//AddCallback adds a call back handle  - Duplicated For Now
-func (cc *MyComputeCell2) AddCallback(callBack func(int)) CallbackHandle {
-	cc.callBacks[&callBack] = callBack
-	return &callBack
-}
-
-//RemoveCallback adds a call back handle - Duplicated For Now
-func (cc *MyComputeCell2) RemoveCallback(callBackHandle CallbackHandle) {
-	delete(cc.callBacks, callBackHandle)
-}
-
-//CreateInput creates input for a reactor
-func (r *MyReactor) CreateInput(value int) InputCell {
-	myInputCell := MyInputCell{value: value, reactor: *r}
-	return &myInputCell
-}
-
-//CreateCompute1 Creates a computed cell
-func (r *MyReactor) CreateCompute1(cell Cell, callBack func(int) int) ComputeCell {
-	myComputeCell := MyComputeCell{value: callBack(cell.Value()), computeFunction: callBack, callBacks: make(map[CallbackHandle]func(int))}
-	cellConnections := r.connections[cell]
-	cellConnections = append(cellConnections, myComputeCell)
-	r.connections[cell] = cellConnections
-	myComputeCell.reactor = *r
-	return &myComputeCell
-}
-
-//CreateCompute2 Creates a computed cell  - Duplicated For Now
-func (r *MyReactor) CreateCompute2(cell1 Cell, cell2 Cell, callBack func(int, int) int) ComputeCell {
-	myComputeCell := MyComputeCell2{}
-	myComputeCell.computeFunction = callBack
-	myComputeCell.value = callBack(cell1.Value(), cell2.Value())
-	myComputeCell.callBacks = make(map[CallbackHandle]func(int))
-	return &myComputeCell
-}
+/*
+*
+* REACTOR NEW METHOD
+*
+ */
 
 //New returns a new reactor
 func New() Reactor {
-	return &MyReactor{make(map[Cell][]MyComputeCell)}
+	return &MyReactor{connections1: make(map[Cell][]*MyComputeCell), connections2: make(map[Cell][]*MyComputeCell)}
 }
