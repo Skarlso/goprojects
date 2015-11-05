@@ -2,7 +2,7 @@ package main
 
 import "fmt"
 
-// Factory don't know yet.
+// Factory A Factory which defines a GetFactory method to return a factory instance
 type Factory interface {
 	GetFactory() Factory
 }
@@ -47,13 +47,13 @@ type NTFS struct {
 	files map[string]File
 }
 
-// Databases abstract database groupper
+// Databases abstract database groupper which acts like it is a mongoDb or an OracleDB
 type Databases struct {
 	*MongoDB
 	*OracleDB
 }
 
-// Filesystems abstract filesystem groupper
+// Filesystems abstract filesystem groupper which acts like a ZFS or an NTFS
 type Filesystems struct {
 	*ZFS
 	*NTFS
@@ -131,7 +131,7 @@ func (fs Filesystems) GetFactory() Factory {
 	return Filesystems{&ZFS{make(map[string]File)}, &NTFS{make(map[string]File)}}
 }
 
-// GetFactory returns factories
+// GetFactory is an abstract factory which returns factories
 func GetFactory(factoryType string) Factory {
 	switch factoryType {
 	case "database":
@@ -142,7 +142,8 @@ func GetFactory(factoryType string) Factory {
 	return nil
 }
 
-// GetDatabase It's a database type factory
+// GetDatabase This works like a concrete database factory. It returns a concrete
+// database based on databaseType
 func GetDatabase(databaseType string) Database {
 	f := GetFactory("database")
 	switch databaseType {
@@ -154,7 +155,8 @@ func GetDatabase(databaseType string) Database {
 	return nil
 }
 
-// GetFilesystems It's a filesystem type factory
+// GetFilesystems This works like a concrete filesystem factory. Returns a concrete
+// filesystem
 func GetFilesystems(filesystemType string) Filesystem {
 	f := GetFactory("filesystems")
 	switch filesystemType {
