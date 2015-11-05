@@ -176,5 +176,5 @@ func main() {
 	filesystem := GetFilesystems("zfs")
 	filesystem.CreateFile("bla")
 	file, _ := filesystem.GetFile("bla")
-	fmt.Println("database: ", file.content)
+	fmt.Println("file content: ", file.content)
 }
