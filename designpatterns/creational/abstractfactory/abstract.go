@@ -17,7 +17,7 @@ type Database interface {
 // Filesystem describes a filesystem with the capabilities to open and read from
 // files.
 type Filesystem interface {
-	CreateFile(fileName string) (bool, error)
+	CreateFile(fileName string) error
 	GetFile(fileName string) (File, error)
 }
 
@@ -82,43 +82,43 @@ func (mdb *MongoDB) AddData(sql string, data string) error {
 }
 
 // CreateFile creates file
-func (zfs *ZFS) CreateFile(fileName string) (bool, error) {
+func (zfs *ZFS) CreateFile(fileName string) error {
 	file := File{content: "ZFS Content", fileName: fileName}
 	zfs.files[fileName] = file
-	if _, ok := zfs.files[fileName]; ok {
-		return true, nil
+	if _, ok := zfs.files[fileName]; !ok {
+		return fmt.Errorf("Something bad happened.")
 	}
 
-	return false, fmt.Errorf("Something bad happened.")
+	return nil
 }
 
 // GetFile gets a file
 func (zfs *ZFS) GetFile(fileName string) (File, error) {
-	if f, ok := zfs.files[fileName]; ok {
-		return f, nil
+	if _, ok := zfs.files[fileName]; !ok {
+		return File{}, fmt.Errorf("File is still there.")
 	}
 
-	return File{}, fmt.Errorf("File is still there.")
+	return zfs.files[fileName], nil
 }
 
 // CreateFile creates file
-func (ntfs *NTFS) CreateFile(fileName string) (bool, error) {
+func (ntfs *NTFS) CreateFile(fileName string) error {
 	file := File{content: "NTFS Content", fileName: fileName}
 	ntfs.files[fileName] = file
 	if _, ok := ntfs.files[fileName]; ok {
-		return true, nil
+		return fmt.Errorf("Something bad happened.")
 	}
 
-	return false, fmt.Errorf("Something bad happened.")
+	return nil
 }
 
 // GetFile gets a file
 func (ntfs *NTFS) GetFile(fileName string) (File, error) {
-	if f, ok := ntfs.files[fileName]; ok {
-		return f, nil
+	if _, ok := ntfs.files[fileName]; !ok {
+		return File{}, fmt.Errorf("File is still there.")
 	}
 
-	return File{}, fmt.Errorf("File is still there.")
+	return ntfs.files[fileName], nil
 }
 
 // GetFactory Create a Factory for the databases
