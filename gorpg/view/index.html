@@ -5,19 +5,19 @@
         <title>{{.Title}}</title>
         <!-- <link rel="stylesheet" href="css/styles.css"> -->
     </head>
-    <!-- {{if cookie is present}} -->
+    <!-- if cookie is present -->
     <!-- display character screen body -->
     <!-- characters will only be remembered by a cookie on the player's machine -->
     <!-- yes cookie if -->
-    <!-- {{if cookie is not present}} -->
+    <!-- if cookie is not present -->
     <!-- display welcome screen -->
     <body>
         <h1>Go RPG</h1>
         <div>
             I don't know you. Please create a character.
-            <form action="/login" method="post">
-                Character's Name:<input type="text" name="username">
-                <input type="submit" value="Login">
+            <form action="/create" method="post">
+                Character's Name:<input type="text" name="charname"/>
+                <input type="submit" value="Create">
             </form>
         </div>
     </body>
