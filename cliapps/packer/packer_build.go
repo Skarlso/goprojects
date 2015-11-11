@@ -26,6 +26,8 @@ func main() {
 	}
 	log.Printf("Validate was a success. Starting packer build, and not waiting for it to finish.")
 	packer := exec.Command("packer", "build", templateFile)
+	packer.Stdout = os.Stdout
+	packer.Stderr = os.Stderr
 	err = packer.Start()
 	if err != nil {
 		log.Fatal(err)
