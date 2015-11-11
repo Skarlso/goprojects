@@ -28,7 +28,7 @@ func main() {
 	packer := exec.Command("packer", "build", templateFile)
 	packer.Stdout = os.Stdout
 	packer.Stderr = os.Stderr
-	err = packer.Start()
+	err = packer.Run()
 	if err != nil {
 		log.Fatal(err)
 	}
