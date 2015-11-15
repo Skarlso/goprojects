@@ -1,0 +1,3 @@
+[submodule "gojira"]
+    path = gitjira
+    url = git://github.com/Skarlso/goprojects.git
