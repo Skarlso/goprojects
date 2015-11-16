@@ -21,6 +21,7 @@ type Issue struct {
 type Credentials struct {
 	Username string
 	Password string
+	URL      string
 }
 
 func initConfig() Credentials {
@@ -40,5 +41,5 @@ func initConfig() Credentials {
 func main() {
 	cred := initConfig()
 	fmt.Println("Usage information")
-	fmt.Printf("Username: %s, Password: %s\n", cred.Username, cred.Password)
+	fmt.Printf("Username: %s, Password: %s, Url: %s\n", cred.Username, cred.Password, cred.URL)
 }
