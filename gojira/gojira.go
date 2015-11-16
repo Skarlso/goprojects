@@ -75,8 +75,6 @@ func main() {
 }
 
 func closeIssue(issueKey string) {
-	cred := &Credentials{}
-	cred.initConfig()
 	if issueKey == "" {
 		printHelp()
 		log.Fatal("Please provide an issueID with -i")
@@ -87,7 +85,7 @@ func closeIssue(issueKey string) {
 			{
 				"fields": {
 				"resolution": {
-					"name": "Done"
+					"name": "<resolution>"
 				}
 				},
 				"transition": {
@@ -96,21 +94,7 @@ func closeIssue(issueKey string) {
 			}
 		`
 	jsonStr = strings.Replace(jsonStr, "<resolution>", flags.Resolution, -1)
-	req, err := http.NewRequest("POST", cred.URL+issueKey+"/transitions", bytes.NewBuffer([]byte(jsonStr)))
-	req.Header.Set("Content-Type", "application/json")
-	req.SetBasicAuth(cred.Username, cred.Password)
-
-	client := &http.Client{}
-	resp, err := client.Do(req)
-	if err != nil {
-		panic(err)
-	}
-	defer resp.Body.Close()
-
-	fmt.Println("response Status:", resp.Status)
-	fmt.Println("response Headers:", resp.Header)
-	body, _ := ioutil.ReadAll(resp.Body)
-	fmt.Println("response Body:", string(body))
+	sendRequest(jsonStr, "POST", issueKey+"/transitions")
 }
 
 func startIssue(issueID string) {
@@ -138,8 +122,25 @@ func createIssue() {
 	fmt.Println("Json: ", json)
 }
 
-func getIssueID(name string) string {
-	return "id"
+func sendRequest(jsonStr string, method string, url string) {
+	cred := &Credentials{}
+	cred.initConfig()
+	req, err := http.NewRequest(method, cred.URL+url, bytes.NewBuffer([]byte(jsonStr)))
+	req.Header.Set("Content-Type", "application/json")
+	req.SetBasicAuth(cred.Username, cred.Password)
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		panic(err)
+	}
+	defer resp.Body.Close()
+
+	fmt.Println("response Status:", resp.Status)
+	fmt.Println("response Headers:", resp.Header)
+	body, _ := ioutil.ReadAll(resp.Body)
+	fmt.Println("response Body:", string(body))
+
 }
 
 func printHelp() {
