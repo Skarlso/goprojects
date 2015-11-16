@@ -1,7 +1,7 @@
 Go Jira Client
 ==============
 
-Simple Jira client written in Go. 
+Simple Jira client written in Go.
 
 Usage
 -----
@@ -9,11 +9,11 @@ Usage
 Some information about the cli commands.
 
 ```bash
-gojira close -m 'Comment' -o 'Outcome' <issuenumber>
+gojira -m 'Comment' -o 'Outcome' <issuenumber> close
 ```
 
 ```bash
-gojira open -d 'Description' -p 'Priority'
+gojira -d 'Description' -p 'Priority' open
 ```
 
 More will come.
