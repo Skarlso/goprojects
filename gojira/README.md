@@ -13,7 +13,7 @@ gojira -m 'Comment' -o 'Outcome' <issuenumber> close
 ```
 
 ```bash
-gojira -d 'Description' -p 'Priority' -t 'Issue Title' -o 'Project like: IT'
+gojira -d 'Description' -p 'Priority' -t 'Issue Title' -o 'Project like: IT' create
 ```
 
 All available flags:
