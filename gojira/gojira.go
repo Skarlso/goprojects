@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"encoding/json"
 	"flag"
 	"fmt"
 	"io/ioutil"
@@ -22,15 +23,25 @@ var flags struct {
 	IssueKey    string
 	Priority    string
 	Resolution  string
+	Title       string
+	Project     string
 }
 
-//Issue a representation of a JIRA Issue
+//Issue is a representation of a Jira Issue
 type Issue struct {
-	Project     string
-	Summary     string
-	Description string
-	IssueType   string
-	Priority    string
+	Fields struct {
+		Project struct {
+			Key string `json:"key"`
+		} `json:"project"`
+		Summary     string `json:"summary"`
+		Description string `json:"description"`
+		Issuetype   struct {
+			Name string `json:"name"`
+		} `json:"issuetype"`
+		Priority struct {
+			ID string `json:"id"`
+		} `json:"priority"`
+	} `json:"fields"`
 }
 
 //Credentials a representation of a JIRA config which helds API permissions
@@ -43,9 +54,11 @@ type Credentials struct {
 func init() {
 	flag.StringVar(&flags.Comment, "m", "Default Comment", "A Comment when changing the status of an Issue.")
 	flag.StringVar(&flags.Description, "d", "Default Description", "Provide a description for a newly created Issue.")
-	flag.StringVar(&flags.Priority, "p", "Critical", "The priority of an Issue which will be set.")
+	flag.StringVar(&flags.Priority, "p", "2", "The priority of an Issue which will be set.")
 	flag.StringVar(&flags.IssueKey, "k", "", "Issue key of an issue.")
 	flag.StringVar(&flags.Resolution, "r", "Done", "Resolution when an issue is closed. Ex.: Done, Fixed, Won't fix.")
+	flag.StringVar(&flags.Title, "t", "Default Title", "Title of an Issue.")
+	flag.StringVar(&flags.Project, "o", "IT", "Define a Project to create a ticket in.")
 	flag.Parse()
 }
 
@@ -69,14 +82,13 @@ func main() {
 		closeIssue(flags.IssueKey)
 	case "start":
 		startIssue(flags.IssueKey)
-	case "open":
+	case "create":
 		createIssue()
 	}
 }
 
 func closeIssue(issueKey string) {
 	if issueKey == "" {
-		printHelp()
 		log.Fatal("Please provide an issueID with -i")
 	}
 	fmt.Println("Closing issue number: ", issueKey)
@@ -94,12 +106,11 @@ func closeIssue(issueKey string) {
 			}
 		`
 	jsonStr = strings.Replace(jsonStr, "<resolution>", flags.Resolution, -1)
-	sendRequest(jsonStr, "POST", issueKey+"/transitions")
+	sendRequest([]byte(jsonStr), "POST", issueKey+"/transitions")
 }
 
 func startIssue(issueID string) {
 	if issueID == "" {
-		printHelp()
 		log.Fatal("Please provide an issueID with -i")
 	}
 
@@ -108,24 +119,24 @@ func startIssue(issueID string) {
 
 func createIssue() {
 	fmt.Println("Creating new issue.")
-	json := `
-	{
-		"fields": {
-		    "project":{ "key": "BLD" },
-		    "summary": "Release '$version'",
-		    "description": "Release workload tracker.",
-		    "issuetype": { "name": "Task" },
-		    "priority": { "id": "2" }
-		    }
+	var issue Issue
+	issue.Fields.Description = flags.Description
+	issue.Fields.Priority.ID = flags.Priority
+	issue.Fields.Summary = flags.Title
+	issue.Fields.Project.Key = flags.Project
+	issue.Fields.Issuetype.Name = "Task"
+	marshalledIssue, err := json.Marshal(issue)
+	if err != nil {
+		log.Fatal("Error occured when Marshaling Issue:", err)
 	}
-	`
-	fmt.Println("Json: ", json)
+	sendRequest(marshalledIssue, "POST", "")
 }
 
-func sendRequest(jsonStr string, method string, url string) {
+func sendRequest(jsonStr []byte, method string, url string) {
 	cred := &Credentials{}
 	cred.initConfig()
-	req, err := http.NewRequest(method, cred.URL+url, bytes.NewBuffer([]byte(jsonStr)))
+	fmt.Println("Json:", string(jsonStr))
+	req, err := http.NewRequest(method, cred.URL+url, bytes.NewBuffer(jsonStr))
 	req.Header.Set("Content-Type", "application/json")
 	req.SetBasicAuth(cred.Username, cred.Password)
 
@@ -141,11 +152,4 @@ func sendRequest(jsonStr string, method string, url string) {
 	body, _ := ioutil.ReadAll(resp.Body)
 	fmt.Println("response Body:", string(body))
 
-}
-
-func printHelp() {
-	fmt.Println("Possible actions are: ")
-	fmt.Println("-m 'Comment' -d 'Description' -p 'Priority' open")
-	fmt.Println("-i 'Issue Number' close")
-	fmt.Println("-i 'Issue Number' start")
 }
