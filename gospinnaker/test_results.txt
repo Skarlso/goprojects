@@ -1,30 +1,12 @@
-=========================================================== - <-ch outside
-50	  55212509 ns/op
-ok  	github.com/skarlso/goprojects/gospinnaker	2.805s
-
-30	  52270299 ns/op
-Hello, From Command.
-ok  	github.com/skarlso/goprojects/gospinnaker	1.613s
-=========================================================== <-ch inside
-20	  81822900 ns/op
-ok  	github.com/skarlso/goprojects/gospinnaker	1.720s
-
-20	  80949669 ns/op
-ok  	github.com/skarlso/goprojects/gospinnaker	1.679s
-
-20	  74112366 ns/op
-ok  	github.com/skarlso/goprojects/gospinnaker	1.563s
-=========================================================== Doing something more <-ch in loop
-10	 131494139 ns/op
-ok  	github.com/skarlso/goprojects/gospinnaker	1.471s
-
-=========================================================== Fixed runtime 30
+=========================================================== Fixed runtime 30 using channel to signal Process ending. <- done
 1	3665018671 ns/op
 ok  	github.com/skarlso/goprojects/gospinnaker	3.667s
 
-=========================================================== Not waiting
+=========================================================== Not waiting (os.Start() instead of Run())
 5	 203587025 ns/op
 ok  	github.com/skarlso/goprojects/gospinnaker	3.365s
-=========================================================== New implementation with wg.Wait instead of individual wait for channels
+=========================================================== New implementation with wg.Wait instead of individual wait for channels and running 2000000000 times.
 2000000000	         0.23 ns/op
 ok  	github.com/skarlso/goprojects/gospinnaker	8.964s
+2000000000	         0.24 ns/op
+ok  	github.com/skarlso/goprojects/gospinnaker	8.930s
