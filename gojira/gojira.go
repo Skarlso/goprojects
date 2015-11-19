@@ -9,7 +9,6 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"strings"
 
 	"github.com/BurntSushi/toml"
 )
@@ -42,6 +41,19 @@ type Issue struct {
 			ID string `json:"id"`
 		} `json:"priority"`
 	} `json:"fields"`
+}
+
+//Transition defines a transition json object. Used for starting, stoppinp
+//generally for state stranfer
+type Transition struct {
+	Fields struct {
+		Resolution struct {
+			Name string `json:"name"`
+		} `json:"resolution"`
+	} `json:"fields"`
+	Transition struct {
+		ID string `json:"id"`
+	} `json:"transition"`
 }
 
 //Credentials a representation of a JIRA config which helds API permissions
@@ -89,24 +101,21 @@ func main() {
 
 func closeIssue(issueKey string) {
 	if issueKey == "" {
-		log.Fatal("Please provide an issueID with -i")
+		log.Fatal("Please provide an issueID with -k")
 	}
 	fmt.Println("Closing issue number: ", issueKey)
 
-	var jsonStr = `
-			{
-				"fields": {
-				"resolution": {
-					"name": "<resolution>"
-				}
-				},
-				"transition": {
-					"id": "5"
-				}
-			}
-		`
-	jsonStr = strings.Replace(jsonStr, "<resolution>", flags.Resolution, -1)
-	sendRequest([]byte(jsonStr), "POST", issueKey+"/transitions")
+	var trans Transition
+
+	//TODO: Add the ability to define a comment for the close reason
+	trans.Fields.Resolution.Name = flags.Resolution
+	trans.Transition.ID = "2"
+	marhsalledTrans, err := json.Marshal(trans)
+	if err != nil {
+		log.Fatal("Error occured when marshaling transition: ", err)
+	}
+	fmt.Println("Marshalled:", trans)
+	sendRequest(marhsalledTrans, "POST", issueKey+"/transitions?expand=transitions.fields")
 }
 
 func startIssue(issueID string) {
