@@ -9,7 +9,11 @@ Usage
 Some information about the cli commands.
 
 ```bash
-gojira -m 'Comment' -o 'Outcome' <issuenumber> close
+# This will default outcome to 'Done'
+gojira -k <IssueKey> close
+
+# You can overwrite outcome with -o
+gojira -o "Won't Fix" -k <IssueKey> close
 ```
 
 ```bash
