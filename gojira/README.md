@@ -17,6 +17,7 @@ gojira -o "Won't Fix" -k <IssueKey> close
 ```
 
 ```bash
+# To a new issue. Priority has to be 1-5
 gojira -d 'Description' -p 'Priority' -t 'Issue Title' -o 'Project like: IT' create
 ```
 
