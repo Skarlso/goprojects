@@ -37,5 +37,6 @@ Upcomming Features
 ------------------
 
 - Ability to add in closeur reason.
-- Ability to transition a ticket into any state
+- Ability to transition a ticket into any state.
 - Ability to define transition state by name, rather than the current way which is by ID.
+- Ability to add in a jira api token rather than a username password.
