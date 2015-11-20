@@ -33,5 +33,9 @@ flag.StringVar(&flags.Title, "t", "Default Title", "Title of an Issue.")
 flag.StringVar(&flags.Project, "o", "IT", "Define a Project to create a ticket in.")
 ```
 
-Issues: transitions throws an internal server error from JIRA. I have no idea why, because jira doesn't return an error.
-I'm guessing it has something to do with how the JSON looks like as creating an issue works fine.
+Upcomming Features
+------------------
+
+- Ability to add in closeur reason.
+- Ability to transition a ticket into any state
+- Ability to define transition state by name, rather than the current way which is by ID.
