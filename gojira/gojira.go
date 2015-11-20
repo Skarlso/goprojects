@@ -13,7 +13,7 @@ import (
 	"github.com/BurntSushi/toml"
 )
 
-var configFile = "jira_config.toml"
+var configFile = "~/.jira_config.toml"
 var parameter string
 
 var flags struct {
