@@ -15,10 +15,7 @@ type Matrix struct {
 //OrderMatrix orders a matrix
 func OrderMatrix(spiV3 [][]int) {
 	orderedM = make([][]int, 0)
-	var innerSpi [][]int
-	for _, v := range spiV3 {
-		innerSpi = append(innerSpi, v)
-	}
+	innerSpi := spiV3
 	m := Matrix{innerSpi}
 	for len(m.matrix) > 0 {
 		m.rARFirstRow()

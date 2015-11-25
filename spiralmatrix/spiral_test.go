@@ -50,6 +50,8 @@ func TestUnEvenArrayV3(*testing.T) {
 func Test5x5ArrayV3(*testing.T) {
 	fmt.Println("========V3=========")
 	OrderMatrix(spi3)
+	fmt.Println("========V3=========")
+	OrderMatrix(spi3)
 }
 
 func BenchmarkRosetta(b *testing.B) {
