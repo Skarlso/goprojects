@@ -13,10 +13,12 @@ type Matrix struct {
 }
 
 //OrderMatrix orders a matrix
-func OrderMatrix(spi [][]int) {
-	var innerSpi [][]int
-	copy(innerSpi, spi)
+func OrderMatrix(spiV3 [][]int) {
 	orderedM = make([][]int, 0)
+	var innerSpi [][]int
+	for _, v := range spiV3 {
+		innerSpi = append(innerSpi, v)
+	}
 	m := Matrix{innerSpi}
 	for len(m.matrix) > 0 {
 		m.rARFirstRow()
@@ -24,7 +26,7 @@ func OrderMatrix(spi [][]int) {
 		m.rARLastRow()
 		m.rARFirstColumn()
 	}
-	fmt.Println(orderedMatrix)
+	fmt.Println(orderedM)
 }
 
 func (m *Matrix) rARFirstRow() {
@@ -58,6 +60,12 @@ func (m *Matrix) rARLastRow() {
 }
 
 func (m *Matrix) rARFirstColumn() {
+	if len(m.matrix) == 1 {
+		orderedM = append(orderedM, m.matrix[0])
+		m.matrix = make([][]int, 0)
+		return
+	}
+
 	var app []int
 	for i := len(m.matrix) - 1; i >= 0; i-- {
 		app = append(app, m.matrix[i][0])
