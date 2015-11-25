@@ -1,6 +1,9 @@
 package spiralmatrix
 
-import "testing"
+import (
+	"fmt"
+	"testing"
+)
 
 var spi1 = [][]int{{1, 2, 3},
 	{8, 9, 4},
@@ -21,12 +24,28 @@ func Test3x3Array(*testing.T) {
 	OrderSpiralMatrix(spi1)
 }
 
+func Test3x3ArrayV3(*testing.T) {
+	fmt.Println("========V3=========")
+	OrderMatrix(spi1)
+	fmt.Println("========V3=========")
+}
+
 func Test4x4Array(*testing.T) {
 	OrderSpiralMatrix(spi2)
 }
 
 func Test5x5Array(*testing.T) {
 	OrderSpiralMatrix(spi3)
+}
+
+func Test5x5ArrayV3(*testing.T) {
+	fmt.Println("========V3=========")
+	OrderMatrix(spi3)
+	fmt.Println("========V3=========")
+	fmt.Println("========V3=========")
+	OrderMatrix(spi3)
+	fmt.Println("========V3=========")
+
 }
 
 func BenchmarkRosetta(b *testing.B) {
@@ -38,5 +57,11 @@ func BenchmarkRosetta(b *testing.B) {
 func BenchmarkMine(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		OrderSpiralMatrix(spi3)
+	}
+}
+
+func BenchmarkMineV3(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		OrderMatrix(spi3)
 	}
 }
