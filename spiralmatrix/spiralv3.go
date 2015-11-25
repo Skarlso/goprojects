@@ -58,12 +58,6 @@ func (m *Matrix) rARLastRow() {
 }
 
 func (m *Matrix) rARFirstColumn() {
-	if len(m.matrix) == 1 {
-		orderedM = append(orderedM, m.matrix[0])
-		m.matrix = make([][]int, 0)
-		return
-	}
-
 	var app []int
 	for i := len(m.matrix) - 1; i >= 0; i-- {
 		app = append(app, m.matrix[i][0])
