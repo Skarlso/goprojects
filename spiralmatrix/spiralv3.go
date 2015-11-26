@@ -1,6 +1,3 @@
-// 100000	     19184 ns/op
-// ok  	github.com/skarlso/goprojects/spiralmatrix	2.085s
-
 package spiralmatrix
 
 import "fmt"
