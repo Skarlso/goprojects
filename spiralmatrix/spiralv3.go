@@ -24,6 +24,9 @@ func OrderMatrix(spiV3 [][]int) {
 }
 
 func (m *Matrix) rARFirstRow() {
+        if len(m.matrix) == 0 {
+            return
+        } 
 	orderedM = append(orderedM, m.matrix[0])
 	m.matrix = m.matrix[:0+copy(m.matrix[0:], m.matrix[0+1:])]
 }
