@@ -33,11 +33,11 @@ func Test3x3ArrayV3(*testing.T) {
 }
 
 //
-func TestUnEvenArrayV3(*testing.T) {
-	fmt.Println("========V3UnEven=========")
-	OrderMatrix(spiUnEven)
-	fmt.Println("========V3UnEven=========")
-}
+// func TestUnEvenArrayV3(*testing.T) {
+// 	fmt.Println("========V3UnEven=========")
+// 	OrderMatrix(spiUnEven)
+// 	fmt.Println("========V3UnEven=========")
+// }
 
 // func Test4x4Array(*testing.T) {
 // 	OrderSpiralMatrix(spi2)
@@ -48,26 +48,27 @@ func TestUnEvenArrayV3(*testing.T) {
 // }
 //
 func Test5x5ArrayV3(*testing.T) {
-	fmt.Println("========V3=========")
+	fmt.Println("========V3MultipleTimes=========")
 	OrderMatrix(spi3)
-	fmt.Println("========V3=========")
+	fmt.Println("========V3MultipleTimes=========")
+	fmt.Println("Spi3 currently is: ", spi3)
 	OrderMatrix(spi3)
 }
 
-func BenchmarkRosetta(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		OrderSpiralMatrixRosetta()
-	}
-}
-
-func BenchmarkMine(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		OrderSpiralMatrix(spi3)
-	}
-}
-
-func BenchmarkMineV3(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		OrderMatrix(spi3)
-	}
-}
+// func BenchmarkRosetta(b *testing.B) {
+// 	for i := 0; i < b.N; i++ {
+// 		OrderSpiralMatrixRosetta()
+// 	}
+// }
+//
+// func BenchmarkMine(b *testing.B) {
+// 	for i := 0; i < b.N; i++ {
+// 		OrderSpiralMatrix(spi3)
+// 	}
+// }
+//
+// func BenchmarkMineV3(b *testing.B) {
+// 	for i := 0; i < b.N; i++ {
+// 		OrderMatrix(spi3)
+// 	}
+// }

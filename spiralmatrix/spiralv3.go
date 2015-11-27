@@ -2,7 +2,7 @@ package spiralmatrix
 
 import "fmt"
 
-var orderedM [][]int
+// var orderedM [][]int
 
 //Matrix a matrix representation
 type Matrix struct {
@@ -11,23 +11,27 @@ type Matrix struct {
 
 //OrderMatrix orders a matrix
 func OrderMatrix(spiV3 [][]int) {
-	orderedM = make([][]int, 0)
-	innerSpi := spiV3
-	m := Matrix{innerSpi}
+	// orderedM = make([][]int, 0)
+	innerSlice := make([][]int, len(spiV3))
+
+	//TODO: Copy copies storage reference. I need the values.
+	copy(innerSlice, spiV3)
+	m := Matrix{matrix: innerSlice}
 	for len(m.matrix) > 0 {
 		m.rARFirstRow()
 		m.rARLastColumn()
 		m.rARLastRow()
 		m.rARFirstColumn()
 	}
-	fmt.Println(orderedM)
+	// fmt.Println(orderedM)
 }
 
 func (m *Matrix) rARFirstRow() {
-        if len(m.matrix) == 0 {
-            return
-        } 
-	orderedM = append(orderedM, m.matrix[0])
+	if len(m.matrix) == 0 {
+		return
+	}
+	// orderedM = append(orderedM, m.matrix[0])
+	fmt.Println(m.matrix[0])
 	m.matrix = m.matrix[:0+copy(m.matrix[0:], m.matrix[0+1:])]
 }
 
@@ -37,7 +41,8 @@ func (m *Matrix) rARLastColumn() {
 		app = append(app, v[len(v)-1])
 	}
 	if len(app) > 0 {
-		orderedM = append(orderedM, app)
+		// orderedM = append(orderedM, app)
+		fmt.Println(app)
 	}
 	for i, v := range m.matrix {
 		m.matrix[i] = m.matrix[i][:len(v)-1+copy(m.matrix[i][len(v)-1:], m.matrix[i][len(v):])]
@@ -51,14 +56,16 @@ func (m *Matrix) rARLastRow() {
 		arr = append(arr, lastRow[i])
 	}
 	if len(arr) > 0 {
-		orderedM = append(orderedM, arr)
+		// orderedM = append(orderedM, arr)
+		fmt.Println(arr)
 	}
 	m.matrix = m.matrix[:len(m.matrix)-1+copy(m.matrix[len(m.matrix)-1:], m.matrix[len(m.matrix):])]
 }
 
 func (m *Matrix) rARFirstColumn() {
 	if len(m.matrix) == 1 {
-		orderedM = append(orderedM, m.matrix[0])
+		// orderedM = append(orderedM, m.matrix[0])
+		fmt.Println(m.matrix[0])
 		m.matrix = make([][]int, 0)
 		return
 	}
@@ -68,7 +75,8 @@ func (m *Matrix) rARFirstColumn() {
 		app = append(app, m.matrix[i][0])
 	}
 	if len(app) > 0 {
-		orderedM = append(orderedM, app)
+		// orderedM = append(orderedM, app)
+		fmt.Println(app)
 	}
 	for i := range m.matrix {
 		m.matrix[i] = m.matrix[i][:0+copy(m.matrix[i][0:], m.matrix[i][1:])]
