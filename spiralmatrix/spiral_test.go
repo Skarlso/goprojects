@@ -23,9 +23,6 @@ var spi3 = [][]int{{1, 2, 3, 4, 5},
 	{14, 23, 22, 21, 8},
 	{13, 12, 11, 10, 9}}
 
-// func Test3x3Array(*testing.T) {
-// 	OrderSpiralMatrix(spi1)
-// }
 
 func Test3x3ArrayV3(*testing.T) {
 	fmt.Println("========V3=========")
