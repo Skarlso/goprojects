@@ -11,19 +11,27 @@ type Matrix struct {
 
 //OrderMatrix orders a matrix
 func OrderMatrix(spiV3 [][]int) {
+	fmt.Println("spiV3 :", spiV3)
 	// orderedM = make([][]int, 0)
-	innerSlice := make([][]int, len(spiV3))
-
+	//innerSlice := make([][]int, len(spiV3))
+	var innerSlice [][]int
 	//TODO: Copy copies storage reference. I need the values.
-	copy(innerSlice, spiV3)
-	m := Matrix{matrix: innerSlice}
+	//copy(innerSlice, spiV3)
+	for _, v := range spiV3 {
+		innerSlice = append(innerSlice, v)
+	}
+	m := Matrix{}
+	m.matrix = make([][]int, len(innerSlice))
+	copy(m.matrix, innerSlice)
 	for len(m.matrix) > 0 {
 		m.rARFirstRow()
 		m.rARLastColumn()
 		m.rARLastRow()
 		m.rARFirstColumn()
 	}
-	// fmt.Println(orderedM)
+	fmt.Println("Matrix matrix:", m.matrix)
+	fmt.Println("innerSlice:", innerSlice)
+	fmt.Println("spiV3:", spiV3)
 }
 
 func (m *Matrix) rARFirstRow() {
