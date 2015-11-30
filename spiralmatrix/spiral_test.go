@@ -6,7 +6,7 @@ import (
 )
 
 var spiUnEven = [][]int{{1, 2, 3},
-	{5, 6, 4}}
+	{5, 4}}
 
 var spi2 = [][]int{{1, 2, 3, 4},
 	{12, 13, 14, 5},
@@ -29,11 +29,11 @@ func Test3x3ArrayV3(*testing.T) {
 }
 
 //
-// func TestUnEvenArrayV3(*testing.T) {
-// 	fmt.Println("========V3UnEven=========")
-// 	OrderMatrix(spiUnEven)
-// 	fmt.Println("========V3UnEven=========")
-// }
+func TestUnEvenArrayV3(*testing.T) {
+	fmt.Println("========V3UnEven=========")
+	OrderMatrix(spiUnEven)
+	fmt.Println("========V3UnEven=========")
+}
 
 // func Test4x4Array(*testing.T) {
 // 	OrderSpiralMatrix(spi2)
