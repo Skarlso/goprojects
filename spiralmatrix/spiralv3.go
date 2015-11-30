@@ -11,18 +11,9 @@ type Matrix struct {
 
 //OrderMatrix orders a matrix
 func OrderMatrix(spiV3 [][]int) {
-	fmt.Println("spiV3 :", spiV3)
-	// orderedM = make([][]int, 0)
-	//innerSlice := make([][]int, len(spiV3))
-	var innerSlice [][]int
-	//TODO: Copy copies storage reference. I need the values.
-	//copy(innerSlice, spiV3)
-	for _, v := range spiV3 {
-		innerSlice = append(innerSlice, v)
-	}
 	m := Matrix{}
-	m.matrix = make([][]int, len(innerSlice))
-	copy(m.matrix, innerSlice)
+	m.matrix = make([][]int, len(spiV3))
+	copy(m.matrix, spiV3)
 	for len(m.matrix) > 0 {
 		m.rARFirstRow()
 		m.rARLastColumn()
@@ -30,7 +21,6 @@ func OrderMatrix(spiV3 [][]int) {
 		m.rARFirstColumn()
 	}
 	fmt.Println("Matrix matrix:", m.matrix)
-	fmt.Println("innerSlice:", innerSlice)
 	fmt.Println("spiV3:", spiV3)
 }
 
@@ -38,7 +28,6 @@ func (m *Matrix) rARFirstRow() {
 	if len(m.matrix) == 0 {
 		return
 	}
-	// orderedM = append(orderedM, m.matrix[0])
 	fmt.Println(m.matrix[0])
 	m.matrix = m.matrix[:0+copy(m.matrix[0:], m.matrix[0+1:])]
 }
@@ -49,7 +38,6 @@ func (m *Matrix) rARLastColumn() {
 		app = append(app, v[len(v)-1])
 	}
 	if len(app) > 0 {
-		// orderedM = append(orderedM, app)
 		fmt.Println(app)
 	}
 	for i, v := range m.matrix {
@@ -64,7 +52,6 @@ func (m *Matrix) rARLastRow() {
 		arr = append(arr, lastRow[i])
 	}
 	if len(arr) > 0 {
-		// orderedM = append(orderedM, arr)
 		fmt.Println(arr)
 	}
 	m.matrix = m.matrix[:len(m.matrix)-1+copy(m.matrix[len(m.matrix)-1:], m.matrix[len(m.matrix):])]
@@ -72,7 +59,6 @@ func (m *Matrix) rARLastRow() {
 
 func (m *Matrix) rARFirstColumn() {
 	if len(m.matrix) == 1 {
-		// orderedM = append(orderedM, m.matrix[0])
 		fmt.Println(m.matrix[0])
 		m.matrix = make([][]int, 0)
 		return
@@ -83,7 +69,6 @@ func (m *Matrix) rARFirstColumn() {
 		app = append(app, m.matrix[i][0])
 	}
 	if len(app) > 0 {
-		// orderedM = append(orderedM, app)
 		fmt.Println(app)
 	}
 	for i := range m.matrix {
