@@ -10,8 +10,12 @@ type Matrix struct {
 //OrderMatrix orders a matrix
 func OrderMatrix(spiV3 [][]int) {
 	m := Matrix{}
-	m.matrix = make([][]int, len(spiV3))
-	copy(m.matrix, spiV3)
+	m.matrix = make([][]int, 0, len(spiV3))
+	for _, v := range spiV3 {
+		tmp := make([]int, len(v))
+		copy(tmp, v)
+		m.matrix = append(m.matrix, tmp)
+	}
 	for len(m.matrix) > 0 {
 		m.rARFirstRow()
 		m.rARLastColumn()
