@@ -2,8 +2,6 @@ package spiralmatrix
 
 import "fmt"
 
-// var orderedM [][]int
-
 //Matrix a matrix representation
 type Matrix struct {
 	matrix [][]int
