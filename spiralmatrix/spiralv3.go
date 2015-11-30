@@ -22,8 +22,6 @@ func OrderMatrix(spiV3 [][]int) {
 		m.rARLastRow()
 		m.rARFirstColumn()
 	}
-	fmt.Println("Matrix matrix:", m.matrix)
-	fmt.Println("spiV3:", spiV3)
 }
 
 func (m *Matrix) rARFirstRow() {
