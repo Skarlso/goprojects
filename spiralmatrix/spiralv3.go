@@ -24,14 +24,17 @@ func OrderMatrix(spiV3 [][]int) {
 }
 
 func (m *Matrix) rARFirstRow() {
-        if len(m.matrix) == 0 {
-            return
-        } 
+	if len(m.matrix) == 0 {
+		return
+	}
 	orderedM = append(orderedM, m.matrix[0])
 	m.matrix = m.matrix[:0+copy(m.matrix[0:], m.matrix[0+1:])]
 }
 
 func (m *Matrix) rARLastColumn() {
+	if len(m.matrix) == 0 {
+		return
+	}
 	var app []int
 	for _, v := range m.matrix {
 		app = append(app, v[len(v)-1])
@@ -45,6 +48,9 @@ func (m *Matrix) rARLastColumn() {
 }
 
 func (m *Matrix) rARLastRow() {
+	if len(m.matrix) == 0 {
+		return
+	}
 	lastRow := m.matrix[len(m.matrix)-1]
 	var arr []int
 	for i := len(lastRow) - 1; i >= 0; i-- {
@@ -57,6 +63,9 @@ func (m *Matrix) rARLastRow() {
 }
 
 func (m *Matrix) rARFirstColumn() {
+	if len(m.matrix) == 0 {
+		return
+	}
 	if len(m.matrix) == 1 {
 		orderedM = append(orderedM, m.matrix[0])
 		m.matrix = make([][]int, 0)
