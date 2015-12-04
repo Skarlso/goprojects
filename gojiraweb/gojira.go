@@ -69,7 +69,7 @@ func (cred *Credentials) initConfig() {
 
 func main() {
 	http.HandleFunc("/", renderMainPage)
-	http.Handle("/css", http.StripPrefix("/css", http.FileServer(http.Dir("."))))
+	http.Handle("/css/", http.StripPrefix("/css", http.FileServer(http.Dir("./css"))))
 	log.Printf("Starting server to listen on port: 8989...")
 	http.ListenAndServe(":8989", nil)
 }
