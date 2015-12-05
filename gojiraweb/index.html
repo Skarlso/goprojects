@@ -6,7 +6,18 @@
         <link rel="stylesheet" href="css/main.css">
     </head>
     <body>
-        {{.Body}}
-        <h1>This is a header</h1>
+        <h1>{{.Header}}</h1>
+        <form action="/create" method="post">
+            Description:
+            <input type="text" name="description" value=""></br>
+            Priority
+            <input type="text" name="priority" value=""></br>
+            Summary:
+            <input type="text" name="summary" value=""></br>
+            Key:
+            <input type="text" name="key" value=""></br>
+            Type:
+            <input type="text" name="type" value=""></br>
+        </form>
     </body>
 </html>

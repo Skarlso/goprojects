@@ -16,8 +16,8 @@ import (
 var configFile = "~/.jira_config.toml"
 
 type Page struct {
-	Title string
-	Body  string
+	Title  string
+	Header string
 }
 
 //Issue is a representation of a Jira Issue
@@ -75,7 +75,7 @@ func main() {
 }
 
 func renderMainPage(w http.ResponseWriter, r *http.Request) {
-	page := Page{"JIRA Web", "Body"}
+	page := Page{"JIRA Web", "Header"}
 	tmpl, err := template.ParseFiles("index.html")
 	if err != nil {
 		log.Fatal("Error:", err)
