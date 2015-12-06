@@ -9,15 +9,16 @@
         <h1>{{.Header}}</h1>
         <form action="/create" method="post">
             Description:
-            <input type="text" name="description" value=""></br>
+            <input type="text" id="description" name="description" value=""></br>
             Priority
-            <input type="text" name="priority" value=""></br>
+            <input type="text" id="priority" name="priority" value=""></br>
             Summary:
-            <input type="text" name="summary" value=""></br>
+            <input type="text" id="summary" name="summary" value=""></br>
             Key:
-            <input type="text" name="key" value=""></br>
+            <input type="text" id="key" name="key" value=""></br>
             Type:
-            <input type="text" name="type" value=""></br>
+            <input type="text" id="type" name="type" value=""></br>
+            <input type="submit" name="create" value="Create Issue">
         </form>
     </body>
 </html>

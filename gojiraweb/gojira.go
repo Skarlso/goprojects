@@ -69,6 +69,7 @@ func (cred *Credentials) initConfig() {
 
 func main() {
 	http.HandleFunc("/", renderMainPage)
+	http.HandleFunc("/create", createIssue)
 	http.Handle("/css/", http.StripPrefix("/css", http.FileServer(http.Dir("./css"))))
 	log.Printf("Starting server to listen on port: 8989...")
 	http.ListenAndServe(":8989", nil)
@@ -110,13 +111,13 @@ func startIssue(issueID string) {
 	fmt.Println("Starting issue number:", issueID)
 }
 
-func createIssue() {
-	fmt.Println("Creating new issue.")
+func createIssue(w http.ResponseWriter, r *http.Request) {
+	log.Println("Creating new issue.")
 	var issue Issue
-	issue.Fields.Description = "Dummy"
-	issue.Fields.Priority.ID = "Dummy"
-	issue.Fields.Summary = "Dummy"
-	issue.Fields.Project.Key = "Dummy"
+	issue.Fields.Description = r.FormValue("description")
+	issue.Fields.Priority.ID = r.FormValue("priority")
+	issue.Fields.Summary = r.FormValue("summary")
+	issue.Fields.Project.Key = r.FormValue("key")
 	issue.Fields.Issuetype.Name = "Task"
 	marshalledIssue, err := json.Marshal(issue)
 	if err != nil {
@@ -136,7 +137,7 @@ func sendRequest(jsonStr []byte, method string, url string) {
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 	defer resp.Body.Close()
 
