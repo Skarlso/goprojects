@@ -11,6 +11,8 @@ import (
 	"text/template"
 
 	"github.com/BurntSushi/toml"
+	"github.com/gorilla/mux"
+	"github.com/justinas/alice"
 )
 
 var configFile = "~/.jira_config.toml"
@@ -68,11 +70,13 @@ func (cred *Credentials) initConfig() {
 }
 
 func main() {
-	http.HandleFunc("/", renderMainPage)
-	http.HandleFunc("/create", createIssue)
+	handlerChain := alice.New(Logging, PanicHandler)
+	router := mux.NewRouter().StrictSlash(true)
+	router.Handle("/create", handlerChain.ThenFunc(createIssue)).Methods("POST")
+	router.Handle("/", handlerChain.ThenFunc(renderMainPage)).Methods("GET")
 	http.Handle("/css/", http.StripPrefix("/css", http.FileServer(http.Dir("./css"))))
 	log.Printf("Starting server to listen on port: 8989...")
-	http.ListenAndServe(":8989", nil)
+	http.ListenAndServe(":8989", router)
 }
 
 func renderMainPage(w http.ResponseWriter, r *http.Request) {
