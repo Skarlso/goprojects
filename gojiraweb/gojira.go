@@ -124,6 +124,7 @@ func createIssue(w http.ResponseWriter, r *http.Request) {
 	issue.Fields.Summary = r.FormValue("summary")
 	issue.Fields.Project.Key = r.FormValue("key")
 	issue.Fields.Issuetype.Name = "Task"
+	log.Println("Creating issue with values:", issue)
 	marshalledIssue, err := json.Marshal(issue)
 	if err != nil {
 		log.Panic("Error occured when Marshaling Issue:", err)
@@ -154,4 +155,8 @@ func sendRequest(jsonStr []byte, method string, url string) {
 	body, _ := ioutil.ReadAll(resp.Body)
 	fmt.Println("response Body:", string(body))
 
+}
+
+func (i Issue) String() string {
+	return fmt.Sprintf("Des: {%s}, IssueType:{%s}, Priority:{%s}, Project:{%s}, Summary:{%s}", i.Fields.Description, i.Fields.Issuetype, i.Fields.Priority, i.Fields.Project, i.Fields.Summary)
 }
