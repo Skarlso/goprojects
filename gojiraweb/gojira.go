@@ -17,6 +17,7 @@ import (
 
 var configFile = "~/.jira_config.toml"
 
+//Page representation of a Page
 type Page struct {
 	Title  string
 	Header string
@@ -61,11 +62,11 @@ type Credentials struct {
 
 func (cred *Credentials) initConfig() {
 	if _, err := os.Stat(configFile); err != nil {
-		log.Fatalf("Error using config file: %v", err)
+		panic(err)
 	}
 
 	if _, err := toml.DecodeFile(configFile, cred); err != nil {
-		log.Fatal("Error during decoding toml config: ", err)
+		panic(err)
 	}
 }
 
@@ -74,7 +75,7 @@ func main() {
 	router := mux.NewRouter().StrictSlash(true)
 	router.Handle("/create", handlerChain.ThenFunc(createIssue)).Methods("POST")
 	router.Handle("/", handlerChain.ThenFunc(renderMainPage)).Methods("GET")
-	http.Handle("/css/", http.StripPrefix("/css", http.FileServer(http.Dir("./css"))))
+	router.PathPrefix("/css/").Handler(http.StripPrefix("/css/", http.FileServer(http.Dir("./css"))))
 	log.Printf("Starting server to listen on port: 8989...")
 	http.ListenAndServe(":8989", router)
 }
