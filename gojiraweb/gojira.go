@@ -84,14 +84,14 @@ func renderMainPage(w http.ResponseWriter, r *http.Request) {
 	page := Page{"JIRA Web", "Header"}
 	tmpl, err := template.ParseFiles("index.html")
 	if err != nil {
-		log.Fatal("Error:", err)
+		panic(err)
 	}
 	tmpl.Execute(w, page)
 }
 
 func closeIssue(issueKey string) {
 	if issueKey == "" {
-		log.Fatal("Please provide an issueID with -k")
+		log.Panic("Please provide an issueID with -k")
 	}
 	fmt.Println("Closing issue number: ", issueKey)
 
@@ -102,7 +102,7 @@ func closeIssue(issueKey string) {
 	trans.Transition.ID = "2"
 	marhsalledTrans, err := json.Marshal(trans)
 	if err != nil {
-		log.Fatal("Error occured when marshaling transition: ", err)
+		log.Panic("Error occured when marshaling transition: ", err)
 	}
 	fmt.Println("Marshalled:", trans)
 	sendRequest(marhsalledTrans, "POST", issueKey+"/transitions?expand=transitions.fields")
@@ -110,7 +110,7 @@ func closeIssue(issueKey string) {
 
 func startIssue(issueID string) {
 	if issueID == "" {
-		log.Fatal("Please provide an issueID with -i")
+		log.Panic("Please provide an issueID with -i")
 	}
 
 	fmt.Println("Starting issue number:", issueID)
@@ -126,7 +126,7 @@ func createIssue(w http.ResponseWriter, r *http.Request) {
 	issue.Fields.Issuetype.Name = "Task"
 	marshalledIssue, err := json.Marshal(issue)
 	if err != nil {
-		log.Fatal("Error occured when Marshaling Issue:", err)
+		log.Panic("Error occured when Marshaling Issue:", err)
 	}
 	sendRequest(marshalledIssue, "POST", "")
 }
@@ -136,13 +136,16 @@ func sendRequest(jsonStr []byte, method string, url string) {
 	cred.initConfig()
 	fmt.Println("Json:", string(jsonStr))
 	req, err := http.NewRequest(method, cred.URL+url, bytes.NewBuffer(jsonStr))
+	if err != nil {
+		log.Panic(err)
+	}
 	req.Header.Set("Content-Type", "application/json")
 	req.SetBasicAuth(cred.Username, cred.Password)
 
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
-		log.Fatal(err)
+		log.Panic(err)
 	}
 	defer resp.Body.Close()
 
