@@ -1,0 +1,54 @@
+{
+    "story": {
+        "title": "Introductions",
+        "creater": "Gergely Brautigam",
+        "date": "08-11-2015",
+        "level": "0-99",
+        "pages": {
+            "1": {
+                "title": "Welcome Adventurer",
+                "body": "You are standing on a field full of giant trees. You can't see the top of the trees; it's mildly humid and hot. You could go: {{.goto}}.",
+                "goto": [{"east":2}, {"west":3}, {"north":4}, {"south":5}]
+            },
+            "2": {
+                "title": "You went east",
+                "body": "The trees here are still lush and exotic. You hear a small river to the <strong>east</strong>. You could go: {{.goto}}",
+                "goto": [{"east":6}, {"west":1}, {"north":7}, {"south":8}],
+                "enemies": [
+                    {"monster1": {
+                        "name":"Burgler",
+                        "stats": [{"str": 5}, {"agi": 10}],
+                        "health": 100,
+                        "mana": 0,
+                        "inventory":[
+                            {"sword":[{"name": "killer"}, {"dmg": 5}]},
+                            {"shild":[{"name": "defender"}, {"def": 2}]}
+                            ]
+                    }},
+                    {"monster2": {
+                        "name":"Burgler 2"
+                    }}
+                ],
+                "items": [
+                    [{"name": "Randomly Lying Around Item"}, {"dmg": 5}],
+                    [{"name": "Cursed item which has an impact on the chars defense"}, {"def": -8}]
+                ]
+            },
+            "3": {
+                "title": "...",
+                "body": "You are standing on a field full of giant trees. You can't see the top of the trees; it's mildly humid and hot. You could go: {{.goto}}",
+                "goto": [{"east":2}, {"west":3}, {"north":4}, {"south":5}]
+            },
+            "4": {
+                "title": "...",
+                "body": "You are standing on a field full of giant trees. You can't see the top of the trees; it's mildly humid and hot. You could go: {{.goto}}",
+                "goto": [{"east":2}, {"west":3}, {"north":4}, {"south":5}]
+            },
+            "5": {
+                "title": "...",
+                "body": "You are standing on a field full of giant trees. You can't see the top of the trees; it's mildly humid and hot. You could go: {{.goto}}",
+                "goto": [{"east":2}, {"west":3}, {"north":4}, {"south":5}]
+            }
+        }
+    }
+}

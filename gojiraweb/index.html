@@ -1,0 +1,24 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>{{.Title}}</title>
+        <link rel="stylesheet" href="css/main.css">
+    </head>
+    <body>
+        <h1>{{.Header}}</h1>
+        <form action="/create" method="post">
+            Description:
+            <input type="text" id="description" name="description" value=""></br>
+            Priority
+            <input type="text" id="priority" name="priority" value=""></br>
+            Summary:
+            <input type="text" id="summary" name="summary" value=""></br>
+            Key:
+            <input type="text" id="key" name="key" value=""></br>
+            Type:
+            <input type="text" id="type" name="type" value=""></br>
+            <input type="submit" name="create" value="Create Issue">
+        </form>
+    </body>
+</html>
