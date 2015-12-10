@@ -78,6 +78,6 @@ func doOperation() {
 	fmt.Println(combinationsOfHundred)
 }
 
-func main() {
-	doOperation()
-}
+//func main() {
+//	doOperation()
+//}

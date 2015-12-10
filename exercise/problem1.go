@@ -13,16 +13,15 @@ func loopCount() {
 	fmt.Println("Sum is:", sum)
 }
 
-func recuriseCount(index int) (sum int) {
-	if index == len(list) {
+func recuriseCount(innerList []int) (sum int) {
+	if len(innerList) == 0 {
 		return sum
 	}
-	sum = list[index]
-	sum += recuriseCount(index + 1)
+	sum = innerList[0] + recuriseCount(innerList[1:])
 	return
 }
 
-// func main() {
-// 	loopCount()
-// 	fmt.Println("Sum rec:", recuriseCount(0))
-// }
+func main() {
+	loopCount()
+	fmt.Println("Sum rec:", recuriseCount(list))
+}
