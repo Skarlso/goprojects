@@ -8,10 +8,6 @@ import (
 )
 
 func main() {
-<<<<<<< HEAD
-	//Port is provided by heroku which we need to bind to.
-=======
->>>>>>> 36f013f142130430590313c0ab4a1b375578533c
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8484"
