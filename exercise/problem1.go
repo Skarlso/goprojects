@@ -21,7 +21,7 @@ func recuriseCount(innerList []int) (sum int) {
 	return
 }
 
-func main() {
-	loopCount()
-	fmt.Println("Sum rec:", recuriseCount(list))
-}
+//func main() {
+//	loopCount()
+//	fmt.Println("Sum rec:", recuriseCount(list))
+//}
