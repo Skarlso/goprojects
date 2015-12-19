@@ -6,5 +6,6 @@ func main() {
 	// solutions.MoveSanta()
 	// solutions.WrappingPaper()
 	// solutions.DeliverPresents()
-	solutions.Mine()
+	// solutions.Mine()
+	solutions.NiceOrNaughty()
 }
