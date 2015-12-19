@@ -7,5 +7,6 @@ func main() {
 	// solutions.WrappingPaper()
 	// solutions.DeliverPresents()
 	// solutions.Mine()
-	solutions.NiceOrNaughty()
+	// solutions.NiceOrNaughty()
+	solutions.TurnOnTheLights()
 }
