@@ -12,14 +12,20 @@ func MoveSanta() {
 		panic(err)
 	}
 	depth := 0
-	for _, v := range fileContent {
+	firstFound := false
+	firstChar := -1
+	for i, v := range fileContent {
 		switch v {
 		case '(':
 			depth++
 		case ')':
 			depth--
 		}
-
+		if depth < 0 && !firstFound {
+			firstChar = i + 1
+			firstFound = true
+		}
 	}
 	fmt.Println("Depth:", depth)
+	fmt.Println("First Basement:", firstChar)
 }
