@@ -15,14 +15,16 @@ func NiceOrNaughty() {
 	scanner.Split(bufio.ScanLines)
 	niceCounter := 0
 	for scanner.Scan() {
-		if isNice(scanner.Text()) {
+		f := isNicePartTwo
+		if f(scanner.Text()) {
 			niceCounter++
+			fmt.Println(scanner.Text())
 		}
 	}
 	fmt.Println(niceCounter)
 }
 
-func isNice(s string) bool {
+func isNicePartOne(s string) bool {
 	//Negative lookahead is not supported in Go
 	//Backreference is not supported either...
 	//Which leaves me with cycles.
@@ -51,4 +53,28 @@ func isNice(s string) bool {
 	}
 
 	return true
+}
+
+func isNicePartTwo(s string) bool {
+	pairFound := false
+	letterBetweenMatch := false
+
+	for i := 0; i < len(s); i++ {
+		if i+1 < len(s) {
+			pair := string(s[i]) + string(s[i+1])
+			if strings.Contains(s[i+2:], pair) {
+				pairFound = true
+			}
+		}
+	}
+
+	for i, v := range s {
+		if i+2 < len(s) {
+			if string(v) == string(s[i+2]) {
+				letterBetweenMatch = true
+			}
+		}
+	}
+
+	return pairFound && letterBetweenMatch
 }

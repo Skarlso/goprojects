@@ -18,7 +18,7 @@ func Mine() {
 		sum := md5.Sum([]byte(temp))
 
 		firstFiveDigit := fmt.Sprintf("%x", sum)
-		if firstFiveDigit[:5] == "00000" {
+		if firstFiveDigit[:6] == "000000" {
 			break
 		}
 		i++
