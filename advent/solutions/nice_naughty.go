@@ -66,11 +66,9 @@ func isNicePartTwo(s string) bool {
 				pairFound = true
 			}
 		}
-	}
 
-	for i, v := range s {
 		if i+2 < len(s) {
-			if string(v) == string(s[i+2]) {
+			if string(s[i]) == string(s[i+2]) {
 				letterBetweenMatch = true
 			}
 		}
