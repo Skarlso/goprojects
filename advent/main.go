@@ -8,5 +8,5 @@ func main() {
 	// solutions.DeliverPresents()
 	// solutions.Mine()
 	// solutions.NiceOrNaughty()
-	solutions.TurnOnTheLights()
+	solutions.TurnOnTheLightsV2()
 }
