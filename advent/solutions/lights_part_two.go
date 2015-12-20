@@ -8,12 +8,16 @@ import (
 	"strings"
 )
 
-//LightCoordinates The location of lights which will be increased
-type LightCoordinates struct {
-	x, y int
-}
+const (
+	//ON on
+	ON = iota
+	//OFF off
+	OFF
+	//TOGGLE toggle
+	TOGGLE
+)
 
-var lightgridV2 = make(map[LightCoordinates]int, 1000)
+var lightgridV2 = make([][]int, GRIDX)
 
 //TurnOnTheLightsV2 turn on the lights
 func TurnOnTheLightsV2() {
@@ -21,6 +25,9 @@ func TurnOnTheLightsV2() {
 	defer inFile.Close()
 	scanner := bufio.NewScanner(inFile)
 	scanner.Split(bufio.ScanLines)
+	for i := range lightgridV2 {
+		lightgridV2[i] = make([]int, GRIDY)
+	}
 
 	for scanner.Scan() {
 		switches := strings.Split(scanner.Text(), " ")
@@ -30,25 +37,25 @@ func TurnOnTheLightsV2() {
 				from := strings.Split(switches[2], ",")
 				to := strings.Split(switches[4], ",")
 				// fmt.Println("On:", from, to)
-				turnOnOffV2(from, to, true)
+				handleLight(from, to, ON)
 			} else {
 				from := strings.Split(switches[2], ",")
 				to := strings.Split(switches[4], ",")
 				// fmt.Println("Off:", from, to)
-				turnOnOffV2(from, to, false)
+				handleLight(from, to, OFF)
 			}
 		case "toggle":
 			from := strings.Split(switches[1], ",")
 			to := strings.Split(switches[3], ",")
 			// fmt.Println("toggle", from, to)
-			toggleV2(from, to)
+			handleLight(from, to, TOGGLE)
 		}
 	}
 
 	countLightsV2()
 }
 
-func turnOnOffV2(from, to []string, on bool) {
+func handleLight(from, to []string, action int) {
 	fromX, _ := strconv.Atoi(from[0])
 	fromY, _ := strconv.Atoi(from[1])
 
@@ -57,37 +64,27 @@ func turnOnOffV2(from, to []string, on bool) {
 
 	for i := fromX; i <= toX; i++ {
 		for j := fromY; j <= toY; j++ {
-			l := LightCoordinates{i, j}
-			if on {
-				lightgridV2[l]++
-			} else {
-				if lightgridV2[l] > 0 {
-					lightgridV2[l]--
+
+			switch action {
+			case ON:
+				lightgridV2[i][j]++
+			case OFF:
+				if lightgridV2[i][j] > 0 {
+					lightgridV2[i][j]--
 				}
+			case TOGGLE:
+				lightgridV2[i][j] += 2
 			}
-		}
-	}
-}
-
-func toggleV2(from, to []string) {
-	fromX, _ := strconv.Atoi(from[0])
-	fromY, _ := strconv.Atoi(from[1])
-
-	toX, _ := strconv.Atoi(to[0])
-	toY, _ := strconv.Atoi(to[1])
-
-	for i := fromX; i <= toX; i++ {
-		for j := fromY; j <= toY; j++ {
-			l := LightCoordinates{i, j}
-			lightgridV2[l] += 2
 		}
 	}
 }
 
 func countLightsV2() {
 	lightcount := 0
-	for _, v := range lightgridV2 {
-		lightcount += v
+	for i := 0; i < len(lightgridV2); i++ {
+		for j := 0; j < len(lightgridV2[i]); j++ {
+			lightcount += lightgridV2[i][j]
+		}
 	}
 
 	fmt.Println("Lights on:", lightcount)
