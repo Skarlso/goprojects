@@ -36,25 +36,25 @@ func TurnOnTheLights() {
 				from := strings.Split(switches[2], ",")
 				to := strings.Split(switches[4], ",")
 				// fmt.Println("On:", from, to)
-				turnOnOff(from, to, true)
+				handleLight(from, to, ON)
 			} else {
 				from := strings.Split(switches[2], ",")
 				to := strings.Split(switches[4], ",")
 				// fmt.Println("Off:", from, to)
-				turnOnOff(from, to, false)
+				handleLight(from, to, OFF)
 			}
 		case "toggle":
 			from := strings.Split(switches[1], ",")
 			to := strings.Split(switches[3], ",")
 			// fmt.Println("toggle", from, to)
-			toggle(from, to)
+			handleLight(from, to, TOGGLE)
 		}
 	}
 
 	countLights()
 }
 
-func turnOnOff(from, to []string, state bool) {
+func handleLight(from, to []string, action int) {
 	fromX, _ := strconv.Atoi(from[0])
 	fromY, _ := strconv.Atoi(from[1])
 
@@ -63,21 +63,15 @@ func turnOnOff(from, to []string, state bool) {
 
 	for i := fromX; i <= toX; i++ {
 		for j := fromY; j <= toY; j++ {
-			lightgrid[i][j] = state
-		}
-	}
-}
 
-func toggle(from, to []string) {
-	fromX, _ := strconv.Atoi(from[0])
-	fromY, _ := strconv.Atoi(from[1])
-
-	toX, _ := strconv.Atoi(to[0])
-	toY, _ := strconv.Atoi(to[1])
-
-	for i := fromX; i <= toX; i++ {
-		for j := fromY; j <= toY; j++ {
-			lightgrid[i][j] = !lightgrid[i][j]
+			switch action {
+			case ON:
+				lightgrid[i][j] = true
+			case OFF:
+				lightgrid[i][j] = false
+			case TOGGLE:
+				lightgrid[i][j] = !lightgrid[i][j]
+			}
 		}
 	}
 }

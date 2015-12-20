@@ -37,25 +37,25 @@ func TurnOnTheLightsV2() {
 				from := strings.Split(switches[2], ",")
 				to := strings.Split(switches[4], ",")
 				// fmt.Println("On:", from, to)
-				handleLight(from, to, ON)
+				handleLightV2(from, to, ON)
 			} else {
 				from := strings.Split(switches[2], ",")
 				to := strings.Split(switches[4], ",")
 				// fmt.Println("Off:", from, to)
-				handleLight(from, to, OFF)
+				handleLightV2(from, to, OFF)
 			}
 		case "toggle":
 			from := strings.Split(switches[1], ",")
 			to := strings.Split(switches[3], ",")
 			// fmt.Println("toggle", from, to)
-			handleLight(from, to, TOGGLE)
+			handleLightV2(from, to, TOGGLE)
 		}
 	}
 
 	countLightsV2()
 }
 
-func handleLight(from, to []string, action int) {
+func handleLightV2(from, to []string, action int) {
 	fromX, _ := strconv.Atoi(from[0])
 	fromY, _ := strconv.Atoi(from[1])
 
