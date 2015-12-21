@@ -23,7 +23,7 @@ var circuit = make([]string, 0)
 //BobbyTable Create help for wiring.
 func BobbyTable() {
 
-	file, _ := os.Open("solutions/bitwise_input.txt")
+	file, _ := os.Open("solutions/bitwise_input2.txt")
 	defer file.Close()
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
