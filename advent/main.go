@@ -10,5 +10,6 @@ func main() {
 	// solutions.NiceOrNaughty()
 	// solutions.TurnOnTheLightsV2()
 	// solutions.BobbyTable()
-	solutions.EscapeV2()
+	// solutions.EscapeV2()
+	solutions.CalculateDistance()
 }
