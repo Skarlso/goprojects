@@ -9,5 +9,6 @@ func main() {
 	// solutions.Mine()
 	// solutions.NiceOrNaughty()
 	// solutions.TurnOnTheLightsV2()
-	solutions.BobbyTable()
+	// solutions.BobbyTable()
+	solutions.Escape()
 }
