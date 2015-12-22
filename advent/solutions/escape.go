@@ -23,3 +23,19 @@ func Escape() {
 
 	fmt.Println("len - mem:", lenSum-memSum)
 }
+
+func EscapeV2() {
+	file, _ := os.Open("solutions/escape_input.txt")
+	defer file.Close()
+	scanner := bufio.NewScanner(file)
+	lenSum := 0
+	encodedLenSum := 0
+	for scanner.Scan() {
+		line := scanner.Text()
+		lenSum += len(line)
+		quoted := strconv.Quote(line)
+		encodedLenSum += len(quoted)
+	}
+
+	fmt.Println("encodedLenSum - lenSum:", encodedLenSum-lenSum)
+}

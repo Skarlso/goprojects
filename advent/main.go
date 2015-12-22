@@ -10,5 +10,5 @@ func main() {
 	// solutions.NiceOrNaughty()
 	// solutions.TurnOnTheLightsV2()
 	// solutions.BobbyTable()
-	solutions.Escape()
+	solutions.EscapeV2()
 }
