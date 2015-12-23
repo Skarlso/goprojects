@@ -1,15 +1,13 @@
 package main
 
-import "fmt"
-
 var a = []int{170, 45, 75, -90, -802, 24, 2, 66}
 var s = make([]int, len(a)/2+1) // scratch space for merge step
 
-func main() {
-	fmt.Println("before:", a)
-	mergeSort(a)
-	fmt.Println("after: ", a)
-}
+//func main() {
+//	fmt.Println("before:", a)
+//	mergeSort(a)
+//	fmt.Println("after: ", a)
+//}
 
 func mergeSort(a []int) {
 	if len(a) < 2 {
