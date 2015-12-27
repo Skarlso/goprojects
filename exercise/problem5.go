@@ -27,7 +27,6 @@ func filterArray(op []string) []int {
 			minuesedInt = append(minuesedInt, numbers[i+1])
 		}
 	}
-	// fmt.Println("Minused:", minuesedInt)
 	skip := false
 	index := 0
 	//Filter out the spaces and bring the numbers together
@@ -55,7 +54,6 @@ func filterArray(op []string) []int {
 			returnInt = append(returnInt, minuesedInt[i])
 		}
 	}
-	// fmt.Println("return: ", returnInt)
 	return returnInt
 }
 
