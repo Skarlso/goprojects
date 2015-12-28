@@ -3,6 +3,7 @@ package solutions
 import (
 	"bufio"
 	"fmt"
+	"math"
 	"os"
 	"strconv"
 	"strings"
@@ -22,14 +23,16 @@ type Targets struct {
 
 //CalculateDistance Calculate shortest distance for given routes
 func CalculateDistance() {
-	file, _ := os.Open("solutions/distance_input2.txt")
+	file, _ := os.Open("solutions/distance_input.txt")
 	defer file.Close()
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
 		line := scanner.Text()
 		split := strings.Split(line, " ")
 		distance, _ := strconv.Atoi(split[4])
+		//Adding both way of the connection
 		connections[split[0]] = append(connections[split[0]], Targets{split[2], distance})
+		connections[split[2]] = append(connections[split[2]], Targets{split[0], distance})
 		if !arrayutils.ContainsString(keys, split[0]) {
 			keys = append(keys, split[0])
 		}
@@ -37,9 +40,7 @@ func CalculateDistance() {
 			keys = append(keys, split[2])
 		}
 	}
-	fmt.Println(connections)
 	generatePermutation(keys, len(keys))
-	fmt.Println(routes)
 	getMinDistances()
 }
 
@@ -59,9 +60,30 @@ func generatePermutation(s []string, n int) {
 	}
 }
 
-//Gather connections based on the possible routes.
-//Need another way to save the distance data in context to connected routes.
 func getMinDistances() {
-	mindis := 99999999
-	fmt.Println(mindis)
+	min := math.MaxInt32
+	for _, v := range routes {
+		dis := 0
+		for i := range v {
+			//Check if the next item is in the connections of the first item.
+			//If yes, retrieve its distance. That distance will be to THIS item.
+			if i+1 < len(v) {
+				dis += getDistanceForTargetConnect(v[i], v[i+1])
+			}
+		}
+		if dis < min {
+			min = dis
+		}
+	}
+	fmt.Println("Minimum distance:", min)
+}
+
+func getDistanceForTargetConnect(name string, conn string) int {
+	targets := connections[name]
+	for _, t := range targets {
+		if t.name == conn {
+			return t.distance
+		}
+	}
+	return 0
 }
