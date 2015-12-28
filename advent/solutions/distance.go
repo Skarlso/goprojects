@@ -2,19 +2,22 @@ package solutions
 
 import (
 	"bufio"
+	"fmt"
 	"os"
 	"strconv"
 	"strings"
+
+	"github.com/Skarlso/goutils/arrayutils"
 )
 
 var connections = make(map[string][]Targets)
-var routes = make(map[string]int)
+var routes = make([][]string, 0)
+var keys = make([]string, 0)
 
 //Targets locations which Santa would like to visit
 type Targets struct {
 	name     string
 	distance int
-	// visited bool
 }
 
 //CalculateDistance Calculate shortest distance for given routes
@@ -27,20 +30,38 @@ func CalculateDistance() {
 		split := strings.Split(line, " ")
 		distance, _ := strconv.Atoi(split[4])
 		connections[split[0]] = append(connections[split[0]], Targets{split[2], distance})
-		// connections[split[2]] = append(connections[split[2]], Targets{split[0], distance})
+		if !arrayutils.ContainsString(keys, split[0]) {
+			keys = append(keys, split[0])
+		}
+		if !arrayutils.ContainsString(keys, split[2]) {
+			keys = append(keys, split[2])
+		}
 	}
-	generatePossibleRoutes()
+	fmt.Println(connections)
+	generatePermutation(keys, len(keys))
+	fmt.Println(routes)
+	getMinDistances()
 }
 
-// func generatePossibleConnectionsForLocation(loc string) {
-// 	for _, l := range connections[loc] {
-// 		if _, ok := connections[l.name]; ok {
-// 			generatePossibleConnectionsForLocation(l.name)
-// 		}
-// 	}
-// }
+func generatePermutation(s []string, n int) {
+	if n == 1 {
+		//Need this, because underneath slices all point to the same array.
+		//So doing routes = append(routes, s) here would only result in the same
+		//data.
+		news := make([]string, len(s))
+		copy(news, s)
+		routes = append(routes, news)
+	}
+	for i := 0; i < n; i++ {
+		s[i], s[n-1] = s[n-1], s[i]
+		generatePermutation(s, n-1)
+		s[i], s[n-1] = s[n-1], s[i]
+	}
+}
 
-//Generates possibles routes between locations which are connected
-func generatePossibleRoutes() {
-
+//Gather connections based on the possible routes.
+//Need another way to save the distance data in context to connected routes.
+func getMinDistances() {
+	mindis := 99999999
+	fmt.Println(mindis)
 }
