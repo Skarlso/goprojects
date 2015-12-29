@@ -1,6 +1,7 @@
 package main
 
 import "github.com/skarlso/goprojects/advent/solutions"
+import "runtime"
 
 //
 func main() {
@@ -12,5 +13,7 @@ func main() {
 	// solutions.TurnOnTheLightsV2()
 	// solutions.BobbyTable()
 	// solutions.EscapeV2()
-	solutions.CalculateDistance()
+	// solutions.CalculateDistance()
+	runtime.GOMAXPROCS(runtime.NumCPU())
+	solutions.GetLengthOfLookAndSay()
 }
