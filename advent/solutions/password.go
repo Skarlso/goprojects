@@ -2,16 +2,8 @@ package solutions
 
 import (
 	"fmt"
-	"strings"
+	"regexp"
 )
-
-/*
-* 1. Increment a letter
-* 1.a -> z should wrap around to a -> mod 26
-* 2. Increment letters in an array from right to left <-
-* 3. Check every iteration of the password
-* 4. Implement regexes which check for password correctness
- */
 
 var passwordInput = []byte("hxbxwxba")
 
@@ -21,7 +13,6 @@ func GenerateNewPassword() {
 }
 
 func checkIncreasingTriplet(s []byte) bool {
-	fmt.Println("Checking for Increasing triplets in:", string(s))
 	for i := range s {
 		if i+2 < len(s) {
 			if s[i]+1 == s[i+1] && s[i]+2 == s[i+2] {
@@ -33,25 +24,20 @@ func checkIncreasingTriplet(s []byte) bool {
 }
 
 func checkCorrectness(s []byte) bool {
-	return checkForbiddenLetters(string(s)) && checkIncreasingTriplet(s) && checkNonOverlappingDifferentPairs(s)
+	return !checkForbiddenLetters(s) && checkIncreasingTriplet(s) && checkNonOverlappingDifferentPairs(s)
 }
 
-func checkForbiddenLetters(s string) bool {
-	fmt.Println("Checking for forbidden letters in:", s)
-	return strings.ContainsAny(s, "i & o & l")
+func checkForbiddenLetters(s []byte) bool {
+	var cannotContain = regexp.MustCompile(`(i|o|l)`)
+	return cannotContain.Match(s)
 }
 
 func checkNonOverlappingDifferentPairs(s []byte) bool {
-	fmt.Println("Checking for Non Overlapping Pairs in:", string(s))
 	pairCount := 0
-	skipCount := 0
 	skip := false
 	for i := range s {
 		if skip {
-			skipCount++
-			if skipCount == 2 {
-				skip = false
-			}
+			skip = false
 			continue
 		}
 
@@ -75,31 +61,29 @@ func incrementPassword(passwd []byte, i int) []byte {
 	//If I'm the last character -> return me incremented if I need to.
 
 	if i == 0 {
-			passwd[i] -= 'a'
-			passwd[i] = (passwd[i] + 1) % ('z' - 'a')
-			passwd[i] += 'a'
+		passwd[i] -= 'a'
+		passwd[i] = (passwd[i] + 1) % (('z' - 'a') + 1)
+		passwd[i] += 'a'
 		return passwd
 	}
 
 	if passwd[i] == 'a' {
-                passwd[i] -= 'a'
-	        passwd[i] = (passwd[i] + 1) % ('z' - 'a')
-	        passwd[i] += 'a'
-		return incrementPassword(passwd, i-1)
-
+		incrementPassword(passwd, i-1)
 	}
+
 	passwd[i] -= 'a'
-	passwd[i] = (passwd[i] + 1) % ('z' - 'a')
+	passwd[i] = (passwd[i] + 1) % (('z' - 'a') + 1)
 	passwd[i] += 'a'
 	return passwd
 }
 
 func incrementalPasswordGenerate(in []byte) []byte {
-
 	pass := in
-	for i := 0; i < 100; i++ {
+	pass[len(pass)-1]++
+	for {
 		pass = incrementPassword(pass, len(pass)-1)
-		fmt.Println(string(pass))
+		if checkCorrectness(pass) {
+			return pass
+		}
 	}
-	return pass
 }

@@ -25,7 +25,7 @@ func TestTriplet(t *testing.T) {
 }
 
 func TestForbiddenLetters(t *testing.T) {
-	sample := "forbidden"
+	sample := "hxccdeei"
 
 	if checkForbiddenLetters(sample) {
 		fmt.Println("Found forbidden letters which is correct.")
@@ -51,11 +51,11 @@ func TestNonOverlappingPair(t *testing.T) {
 		t.Error("Did not find overlapping pairs in:", sample)
 	}
 
-	errorSample := "aabb"
+	sample = "aabb"
 
-	if checkNonOverlappingDifferentPairs([]byte(errorSample)) {
-		t.Error("Found overlapping pairs in:", errorSample)
-	} else {
+	if checkNonOverlappingDifferentPairs([]byte(sample)) {
 		fmt.Println("All Good.")
+	} else {
+		t.Error("Found overlapping pairs in:", sample)
 	}
 }
