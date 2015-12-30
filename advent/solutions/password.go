@@ -5,7 +5,7 @@ import (
 	"regexp"
 )
 
-var passwordInput = []byte("hxbxwxba")
+var passwordInput = []byte("hxbxxyzz")
 
 //GenerateNewPassword generates a new password for Santa
 func GenerateNewPassword() {
@@ -79,7 +79,7 @@ func incrementPassword(passwd []byte, i int) []byte {
 
 func incrementalPasswordGenerate(in []byte) []byte {
 	pass := in
-	pass[len(pass)-1]++
+	// pass[len(pass)-1]++
 	for {
 		pass = incrementPassword(pass, len(pass)-1)
 		if checkCorrectness(pass) {
