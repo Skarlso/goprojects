@@ -82,7 +82,10 @@ func incrementPassword(passwd []byte, i int) []byte {
 	}
 
 	if passwd[i] == 'a' {
-		return incrementPassword(passwd, i-1, true)
+                passwd[i] -= 'a'
+	        passwd[i] = (passwd[i] + 1) % ('z' - 'a')
+	        passwd[i] += 'a'
+		return incrementPassword(passwd, i-1)
 
 	}
 	passwd[i] -= 'a'
@@ -93,9 +96,9 @@ func incrementPassword(passwd []byte, i int) []byte {
 
 func incrementalPasswordGenerate(in []byte) []byte {
 
-	var pass []byte
+	pass := in
 	for i := 0; i < 100; i++ {
-		pass = incrementPassword(in, len(in)-1)
+		pass = incrementPassword(pass, len(pass)-1)
 		fmt.Println(string(pass))
 	}
 	return pass
