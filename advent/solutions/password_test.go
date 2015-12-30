@@ -5,10 +5,6 @@ import (
 	"testing"
 )
 
-func TestIncrementingPasswordCharacterByCharacter(*testing.T) {
-	incrementPassword(passwordInput)
-}
-
 func TestTriplet(t *testing.T) {
 	sample := "aaabcaa"
 	if !checkIncreasingTriplet([]byte(sample)) {
