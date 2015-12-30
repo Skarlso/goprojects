@@ -1,7 +1,6 @@
 package main
 
 import "github.com/skarlso/goprojects/advent/solutions"
-import "runtime"
 
 //
 func main() {
@@ -14,6 +13,6 @@ func main() {
 	// solutions.BobbyTable()
 	// solutions.EscapeV2()
 	// solutions.CalculateDistance()
-	runtime.GOMAXPROCS(runtime.NumCPU())
-	solutions.GetLengthOfLookAndSay()
+	// solutions.GetLengthOfLookAndSay()
+	solutions.GenerateNewPassword("asdf")
 }

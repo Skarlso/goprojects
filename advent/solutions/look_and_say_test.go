@@ -17,8 +17,8 @@ var lookTests = []LookAndSayTestCase{
 
 func TestBasicLookAndSay(t *testing.T) {
 	for _, test := range lookTests {
-		actual := LookAndSay(test.input)
-		if actual != test.expected {
+		actual := LookAndSay([]byte(test.input))
+		if string(actual) != test.expected {
 			t.Errorf("input:%s actual: %s; expected:%s", test.input, actual, test.expected)
 		}
 	}
