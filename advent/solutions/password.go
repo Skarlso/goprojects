@@ -75,22 +75,20 @@ func incrementPassword(passwd []byte, i int, inc bool) []byte {
 	//If I'm the last character -> return me incremented if I need to.
 
 	if i == 0 {
-		if inc {
 			passwd[i] -= 'a'
 			passwd[i] = (passwd[i] + 1) % ('z' - 'a')
 			passwd[i] += 'a'
-		}
 		return passwd
 	}
 
 	if passwd[i] == 'a' {
 		return incrementPassword(passwd, i-1, true)
+
 	}
 	passwd[i] -= 'a'
 	passwd[i] = (passwd[i] + 1) % ('z' - 'a')
 	passwd[i] += 'a'
-
-	return incrementPassword(passwd, i-1, false)
+	return passwd
 }
 
 func incrementalPasswordGenerate(in []byte) []byte {
