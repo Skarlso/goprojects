@@ -66,19 +66,53 @@ func checkNonOverlappingDifferentPairs(s []byte) bool {
 	return pairCount > 1
 }
 
-func incrementalPasswordGenerate(in []byte) []byte {
-	for i := len(in) - 1; i >= 0; i-- {
-		origin := in[i]
-		in[i]++
-		for in[i] != origin {
-			in[i] -= 'a'
-			in[i] = (in[i] + 1) % ('z' - 'a')
-			in[i] += 'a'
-			if checkCorrectness(in) {
-				return in
-			}
+func incrementPassword(passwd []byte, i int, inc bool) []byte {
+	//If passwd[i] == 'a' then... The next character also needs to increase
+	//1. Am I an 'a'
+	//2. Yes -> I need to tell the next guy to increment -> Call myself with i-1
+	//3. Increment myself
+	//1.a If not -> increment
+	//If I'm the last character -> return me incremented if I need to.
+
+	if i == 0 {
+		if inc {
+			passwd[i] -= 'a'
+			passwd[i] = (passwd[i] + 1) % ('z' - 'a')
+			passwd[i] += 'a'
 		}
+		return passwd
 	}
 
-	return nil
+	if passwd[i] == 'a' {
+		return incrementPassword(passwd, i-1, true)
+	}
+	passwd[i] -= 'a'
+	passwd[i] = (passwd[i] + 1) % ('z' - 'a')
+	passwd[i] += 'a'
+
+	return passwd
+}
+
+func incrementalPasswordGenerate(in []byte) []byte {
+
+	var pass []byte
+	for i := 0; i < 100; i++ {
+		pass = incrementPassword(in, len(in)-1, false)
+		fmt.Println(string(pass))
+	}
+	return pass
+	// for i := len(in) - 1; i >= 0; i-- {
+	// 	origin := in[i]
+	// 	in[i]++
+	// 	for in[i] != origin {
+	// 		in[i] -= 'a'
+	// 		in[i] = (in[i] + 1) % ('z' - 'a')
+	// 		in[i] += 'a'
+	// 		if checkCorrectness(in) {
+	// 			return in
+	// 		}
+	// 	}
+	// }
+	//
+	// return nil
 }
