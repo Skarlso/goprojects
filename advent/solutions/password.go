@@ -79,7 +79,6 @@ func incrementPassword(passwd []byte, i int) []byte {
 
 func incrementalPasswordGenerate(in []byte) []byte {
 	pass := in
-	// pass[len(pass)-1]++
 	for {
 		pass = incrementPassword(pass, len(pass)-1)
 		if checkCorrectness(pass) {
