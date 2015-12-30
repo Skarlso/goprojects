@@ -66,7 +66,7 @@ func checkNonOverlappingDifferentPairs(s []byte) bool {
 	return pairCount > 1
 }
 
-func incrementPassword(passwd []byte, i int, inc bool) []byte {
+func incrementPassword(passwd []byte, i int) []byte {
 	//If passwd[i] == 'a' then... The next character also needs to increase
 	//1. Am I an 'a'
 	//2. Yes -> I need to tell the next guy to increment -> Call myself with i-1
@@ -95,7 +95,7 @@ func incrementalPasswordGenerate(in []byte) []byte {
 
 	var pass []byte
 	for i := 0; i < 100; i++ {
-		pass = incrementPassword(in, len(in)-1, false)
+		pass = incrementPassword(in, len(in)-1)
 		fmt.Println(string(pass))
 	}
 	return pass
