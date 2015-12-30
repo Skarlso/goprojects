@@ -90,7 +90,7 @@ func incrementPassword(passwd []byte, i int, inc bool) []byte {
 	passwd[i] = (passwd[i] + 1) % ('z' - 'a')
 	passwd[i] += 'a'
 
-	return passwd
+	return incrementPassword(passwd, i-1, false)
 }
 
 func incrementalPasswordGenerate(in []byte) []byte {
