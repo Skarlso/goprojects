@@ -101,18 +101,4 @@ func incrementalPasswordGenerate(in []byte) []byte {
 		fmt.Println(string(pass))
 	}
 	return pass
-	// for i := len(in) - 1; i >= 0; i-- {
-	// 	origin := in[i]
-	// 	in[i]++
-	// 	for in[i] != origin {
-	// 		in[i] -= 'a'
-	// 		in[i] = (in[i] + 1) % ('z' - 'a')
-	// 		in[i] += 'a'
-	// 		if checkCorrectness(in) {
-	// 			return in
-	// 		}
-	// 	}
-	// }
-	//
-	// return nil
 }
