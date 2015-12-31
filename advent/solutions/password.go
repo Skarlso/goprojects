@@ -9,7 +9,12 @@ var passwordInput = []byte("hxbxxyzz")
 
 //GenerateNewPassword generates a new password for Santa
 func GenerateNewPassword() {
-	fmt.Println(string(incrementalPasswordGenerate(passwordInput)))
+	generatedPassword := make(chan []byte, 100)
+	checkedPassword := make(chan []byte)
+	go incrementalPasswordGenerate(generatedPassword)
+	go checkCorrectness(generatedPassword, checkedPassword)
+	pass := <-checkedPassword
+	fmt.Println(string(pass))
 }
 
 func checkIncreasingTriplet(s []byte) bool {
@@ -23,8 +28,14 @@ func checkIncreasingTriplet(s []byte) bool {
 	return false
 }
 
-func checkCorrectness(s []byte) bool {
-	return !checkForbiddenLetters(s) && checkIncreasingTriplet(s) && checkNonOverlappingDifferentPairs(s)
+func checkCorrectness(input chan []byte, output chan []byte) {
+	for in := range input {
+		s := in
+		checked := !checkForbiddenLetters(s) && checkIncreasingTriplet(s) && checkNonOverlappingDifferentPairs(s)
+		if checked {
+			output <- s
+		}
+	}
 }
 
 func checkForbiddenLetters(s []byte) bool {
@@ -77,13 +88,11 @@ func incrementPassword(passwd []byte, i int) []byte {
 	return passwd
 }
 
-func incrementalPasswordGenerate(in []byte) []byte {
-	pass := in
+func incrementalPasswordGenerate(in chan []byte) {
+	pass := <-in
 	// pass[len(pass)-1]++
 	for {
 		pass = incrementPassword(pass, len(pass)-1)
-		if checkCorrectness(pass) {
-			return pass
-		}
+		in <- pass
 	}
 }
