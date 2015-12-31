@@ -90,7 +90,6 @@ func incrementPassword(passwd []byte, i int) []byte {
 
 func incrementalPasswordGenerate(in chan []byte) {
 	pass := <-in
-	// pass[len(pass)-1]++
 	for {
 		pass = incrementPassword(pass, len(pass)-1)
 		in <- pass
