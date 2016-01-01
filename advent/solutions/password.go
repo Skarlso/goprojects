@@ -5,19 +5,19 @@ import (
 	"regexp"
 )
 
-var passwordInput = []byte("hxbxwxba")
+var passwordInputChan = []byte("hxbxwxba")
 
-//GenerateNewPassword generates a new password for Santa
-func GenerateNewPassword() {
+//GenerateNewPasswordChan generates a new password for Santa
+func GenerateNewPasswordChan() {
 	generatedPassword := make(chan []byte, 100)
 	checkedPassword := make(chan []byte)
-	go incrementalPasswordGenerate(generatedPassword)
-	go checkCorrectness(generatedPassword, checkedPassword)
+	go incrementalPasswordGenerateChan(generatedPassword)
+	go checkCorrectnessChan(generatedPassword, checkedPassword)
 	pass := <-checkedPassword
 	fmt.Println(string(pass))
 }
 
-func checkIncreasingTriplet(s []byte) bool {
+func checkIncreasingTripletChan(s []byte) bool {
 	for i := range s {
 		if i+2 < len(s) {
 			if s[i]+1 == s[i+1] && s[i]+2 == s[i+2] {
@@ -28,22 +28,25 @@ func checkIncreasingTriplet(s []byte) bool {
 	return false
 }
 
-func checkCorrectness(input chan []byte, output chan []byte) {
+func checkCorrectnessChan(input chan []byte, output chan []byte) {
 	for in := range input {
 		s := in
-		checked := !checkForbiddenLetters(s) && checkIncreasingTriplet(s) && checkNonOverlappingDifferentPairs(s)
+		fmt.Println("Checking:", s)
+		checked := !checkForbiddenLettersChan(s) && checkIncreasingTripletChan(s) && checkNonOverlappingDifferentPairsChan(s)
 		if checked {
+			fmt.Println("Good password:", s)
 			output <- s
+			break
 		}
 	}
 }
 
-func checkForbiddenLetters(s []byte) bool {
+func checkForbiddenLettersChan(s []byte) bool {
 	var cannotContain = regexp.MustCompile(`(i|o|l)`)
 	return cannotContain.Match(s)
 }
 
-func checkNonOverlappingDifferentPairs(s []byte) bool {
+func checkNonOverlappingDifferentPairsChan(s []byte) bool {
 	pairCount := 0
 	skip := false
 	for i := range s {
@@ -63,7 +66,7 @@ func checkNonOverlappingDifferentPairs(s []byte) bool {
 	return pairCount > 1
 }
 
-func incrementPassword(passwd []byte, i int) []byte {
+func incrementPasswordChan(passwd []byte, i int) []byte {
 	//If passwd[i] == 'a' then... The next character also needs to increase
 	//1. Am I an 'a'
 	//2. Yes -> I need to tell the next guy to increment -> Call myself with i-1
@@ -79,7 +82,7 @@ func incrementPassword(passwd []byte, i int) []byte {
 	}
 
 	if passwd[i] == 'a' {
-		incrementPassword(passwd, i-1)
+		incrementPasswordChan(passwd, i-1)
 	}
 
 	passwd[i] -= 'a'
@@ -88,10 +91,11 @@ func incrementPassword(passwd []byte, i int) []byte {
 	return passwd
 }
 
-func incrementalPasswordGenerate(out chan []byte) {
-	pass := passwordInput
+func incrementalPasswordGenerateChan(out chan []byte) {
+	pass := passwordInputChan
 	for {
-		pass = incrementPassword(pass, len(pass)-1)
+		pass = incrementPasswordChan(pass, len(pass)-1)
+		fmt.Println("New password is:", pass)
 		out <- pass
 	}
 }
