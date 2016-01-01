@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"time"
+)
 
 //LIMIT limit
 const LIMIT = 10000000
@@ -19,7 +22,9 @@ func main() {
 func checkPassword(input <-chan int, output chan<- int) {
 	for {
 		p := <-input
-		// fmt.Println("Checking p:", p)
+		//Introduce lengthy operation here
+		time.Sleep(time.Second)
+		fmt.Println("Checking p:", p)
 		if p > LIMIT {
 			output <- p
 		}
@@ -30,7 +35,7 @@ func passwordIncrement(out chan<- int) {
 	p := 0
 	for {
 		p++
-		// fmt.Println("Generated Password:", p)
+		fmt.Println("Generated Password:", p)
 		out <- p
 	}
 }

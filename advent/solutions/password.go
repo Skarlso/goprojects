@@ -9,7 +9,7 @@ var passwordInputChan = []byte("hxbxwxba")
 
 //GenerateNewPasswordChan generates a new password for Santa
 func GenerateNewPasswordChan() {
-	generatedPassword := make(chan []byte)
+	generatedPassword := make(chan []byte, 100)
 	correctPassword := make(chan []byte)
 	defer close(generatedPassword)
 	defer close(correctPassword)
@@ -20,9 +20,9 @@ func GenerateNewPasswordChan() {
 }
 
 func checkCorrectnessChan(input <-chan []byte, output chan<- []byte) {
-	for {
-		//Could use range here as it's an infinite loop anyways
-		s := <-input
+	//Could use range here as it's an infinite loop anyways
+	for in := range input {
+		s := in
 		fmt.Println("Checking:", string(s))
 		correct := !checkForbiddenLettersChan(s) && checkIncreasingTripletChan(s) && checkNonOverlappingDifferentPairsChan(s)
 		if correct {
