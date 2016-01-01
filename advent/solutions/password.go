@@ -9,7 +9,7 @@ var passwordInputChan = []byte("hxbxwxba")
 
 //GenerateNewPasswordChan generates a new password for Santa
 func GenerateNewPasswordChan() {
-	generatedPassword := make(chan []byte, 100)
+	generatedPassword := make(chan []byte)
 	correctPassword := make(chan []byte)
 	defer close(generatedPassword)
 	defer close(correctPassword)
@@ -29,7 +29,6 @@ func checkCorrectnessChan(input <-chan []byte, output chan<- []byte) {
 			// fmt.Println("Good password:", string(s))
 			// Return and stop with the first good password that was found
 			output <- s
-			break
 		}
 	}
 }
@@ -78,7 +77,7 @@ func incrementPasswordChan(passwd []byte, i int) []byte {
 		return passwd
 	}
 
-	if passwd[i] == 'a' {
+	if passwd[i] == 'z' {
 		incrementPasswordChan(passwd, i-1)
 	}
 

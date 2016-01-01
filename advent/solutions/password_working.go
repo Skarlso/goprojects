@@ -67,7 +67,7 @@ func incrementPassword(passwd []byte, i int) []byte {
 		return passwd
 	}
 
-	if passwd[i] == 'a' {
+	if passwd[i] == 'z' {
 		incrementPassword(passwd, i-1)
 	}
 
