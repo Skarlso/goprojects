@@ -27,7 +27,7 @@ func TestTriplet(t *testing.T) {
 func TestForbiddenLetters(t *testing.T) {
 	sample := "hxccdeei"
 
-	if checkForbiddenLetters(sample) {
+	if checkForbiddenLetters([]byte(sample)) {
 		fmt.Println("Found forbidden letters which is correct.")
 	} else {
 		t.Error("Did not find forbidden letters.")
@@ -35,7 +35,7 @@ func TestForbiddenLetters(t *testing.T) {
 
 	errorSample := "abdsc"
 
-	if checkForbiddenLetters(errorSample) {
+	if checkForbiddenLetters([]byte(errorSample)) {
 		t.Error("Should have returned false for: ", errorSample)
 	} else {
 		fmt.Println("All Good.")
