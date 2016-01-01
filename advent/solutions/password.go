@@ -10,6 +10,9 @@ var passwordInputChan = []byte("hxbxxyzz")
 //GenerateNewPasswordChan generates a new password for Santa
 func GenerateNewPasswordChan() {
 	//TODO: this did not work with a []byte channel. Why?
+	//TODO: ANSWER => Because I'm using a []byte SLICE!! And the slice may be overwritten as per the documentation!
+	//So using a primitive here works because that doesn't get overwritten!
+	//SEE DOC HERE => https://golang.org/pkg/bufio/#Scanner.Bytes
 	generatedPassword := make(chan string, 100)
 	correctPassword := make(chan string)
 	defer close(generatedPassword)
