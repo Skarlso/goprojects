@@ -9,7 +9,7 @@ var passwordInputChan = []byte("hxbxwxba")
 
 //GenerateNewPasswordChan generates a new password for Santa
 func GenerateNewPasswordChan() {
-	generatedPassword := make(chan []byte)
+	generatedPassword := make(chan []byte, 100)
 	correctPassword := make(chan []byte)
 	defer close(generatedPassword)
 	defer close(correctPassword)
