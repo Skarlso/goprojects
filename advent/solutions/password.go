@@ -5,12 +5,13 @@ import (
 	"regexp"
 )
 
-var passwordInputChan = []byte("hxbxwxba")
+var passwordInputChan = []byte("hxbxxyzz")
 
 //GenerateNewPasswordChan generates a new password for Santa
 func GenerateNewPasswordChan() {
-	generatedPassword := make(chan []byte, 100)
-	correctPassword := make(chan []byte)
+	//TODO: this did not work with a []byte channel. Why?
+	generatedPassword := make(chan string, 100)
+	correctPassword := make(chan string)
 	defer close(generatedPassword)
 	defer close(correctPassword)
 	go incrementalPasswordGenerateChan(generatedPassword)
@@ -19,17 +20,28 @@ func GenerateNewPasswordChan() {
 	fmt.Println(string(pass))
 }
 
-func checkCorrectnessChan(input <-chan []byte, output chan<- []byte) {
+func checkCorrectnessChan(input <-chan string, output chan<- string) {
 	//Could use range here as it's an infinite loop anyways
-	for in := range input {
-		s := in
-		fmt.Println("Checking:", string(s))
+	for {
+		s := []byte(<-input)
+		// time.Sleep(time.Second)
+		// fmt.Println("Checking:", string(s))
 		correct := !checkForbiddenLettersChan(s) && checkIncreasingTripletChan(s) && checkNonOverlappingDifferentPairsChan(s)
 		if correct {
 			// fmt.Println("Good password:", string(s))
 			// Return and stop with the first good password that was found
-			output <- s
+			output <- string(s)
+			break
 		}
+	}
+}
+
+func incrementalPasswordGenerateChan(out chan<- string) {
+	pass := passwordInputChan
+	for {
+		pass = incrementPasswordChan(pass, len(pass)-1)
+		// fmt.Println("New password is:", string(pass))
+		out <- string(pass)
 	}
 }
 
@@ -85,13 +97,4 @@ func incrementPasswordChan(passwd []byte, i int) []byte {
 	passwd[i] = (passwd[i] + 1) % (('z' - 'a') + 1)
 	passwd[i] += 'a'
 	return passwd
-}
-
-func incrementalPasswordGenerateChan(out chan<- []byte) {
-	pass := passwordInputChan
-	for {
-		pass = incrementPasswordChan(pass, len(pass)-1)
-		fmt.Println("New password is:", string(pass))
-		out <- pass
-	}
 }
