@@ -15,6 +15,6 @@ func permute(s []string, n int) {
 	}
 }
 
-func main() {
-	permute(locations, len(locations))
-}
+// func main() {
+// 	permute(locations, len(locations))
+// }

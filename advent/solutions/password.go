@@ -9,12 +9,29 @@ var passwordInputChan = []byte("hxbxwxba")
 
 //GenerateNewPasswordChan generates a new password for Santa
 func GenerateNewPasswordChan() {
-	generatedPassword := make(chan []byte, 100)
-	checkedPassword := make(chan []byte)
+	generatedPassword := make(chan []byte)
+	correctPassword := make(chan []byte)
+	defer close(generatedPassword)
+	defer close(correctPassword)
 	go incrementalPasswordGenerateChan(generatedPassword)
-	go checkCorrectnessChan(generatedPassword, checkedPassword)
-	pass := <-checkedPassword
+	go checkCorrectnessChan(generatedPassword, correctPassword)
+	pass := <-correctPassword
 	fmt.Println(string(pass))
+}
+
+func checkCorrectnessChan(input <-chan []byte, output chan<- []byte) {
+	for {
+		//Could use range here as it's an infinite loop anyways
+		s := <-input
+		fmt.Println("Checking:", string(s))
+		correct := !checkForbiddenLettersChan(s) && checkIncreasingTripletChan(s) && checkNonOverlappingDifferentPairsChan(s)
+		if correct {
+			// fmt.Println("Good password:", string(s))
+			// Return and stop with the first good password that was found
+			output <- s
+			break
+		}
+	}
 }
 
 func checkIncreasingTripletChan(s []byte) bool {
@@ -26,19 +43,6 @@ func checkIncreasingTripletChan(s []byte) bool {
 		}
 	}
 	return false
-}
-
-func checkCorrectnessChan(input chan []byte, output chan []byte) {
-	for in := range input {
-		s := in
-		fmt.Println("Checking:", s)
-		checked := !checkForbiddenLettersChan(s) && checkIncreasingTripletChan(s) && checkNonOverlappingDifferentPairsChan(s)
-		if checked {
-			fmt.Println("Good password:", s)
-			output <- s
-			break
-		}
-	}
 }
 
 func checkForbiddenLettersChan(s []byte) bool {
@@ -67,13 +71,6 @@ func checkNonOverlappingDifferentPairsChan(s []byte) bool {
 }
 
 func incrementPasswordChan(passwd []byte, i int) []byte {
-	//If passwd[i] == 'a' then... The next character also needs to increase
-	//1. Am I an 'a'
-	//2. Yes -> I need to tell the next guy to increment -> Call myself with i-1
-	//3. Increment myself
-	//1.a If not -> increment
-	//If I'm the last character -> return me incremented if I need to.
-
 	if i == 0 {
 		passwd[i] -= 'a'
 		passwd[i] = (passwd[i] + 1) % (('z' - 'a') + 1)
@@ -91,11 +88,11 @@ func incrementPasswordChan(passwd []byte, i int) []byte {
 	return passwd
 }
 
-func incrementalPasswordGenerateChan(out chan []byte) {
+func incrementalPasswordGenerateChan(out chan<- []byte) {
 	pass := passwordInputChan
 	for {
 		pass = incrementPasswordChan(pass, len(pass)-1)
-		fmt.Println("New password is:", pass)
+		fmt.Println("New password is:", string(pass))
 		out <- pass
 	}
 }

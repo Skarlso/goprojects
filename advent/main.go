@@ -14,5 +14,5 @@ func main() {
 	// solutions.EscapeV2()
 	// solutions.CalculateDistance()
 	// solutions.GetLengthOfLookAndSay()
-	solutions.GenerateNewPassword()
+	solutions.GenerateNewPasswordChan()
 }
