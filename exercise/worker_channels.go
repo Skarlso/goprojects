@@ -2,9 +2,6 @@ package main
 
 import "fmt"
 
-//LIMIT limit
-const LIMIT = 10000000
-
 func main() {
 	generatedPassword := make(chan int, 100)
 	correctPassword := make(chan int)
@@ -34,18 +31,9 @@ func increment(i int) int {
 }
 
 func check(i int) bool {
-
-	for i := 0; i < 10; i++ {
-		p := i * 2
-		if p&1 == 1 {
-
-		}
-	}
-
 	if i&1 == 1 && i > 50000 {
 		return true
 	}
-
 	return false
 }
 
@@ -53,7 +41,6 @@ func passwordIncrement(out chan<- int) {
 	p := 0
 	for {
 		p = increment(p)
-		fmt.Println("Generated Password:", p)
 		out <- p
 	}
 }
