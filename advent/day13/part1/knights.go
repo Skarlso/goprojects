@@ -41,8 +41,9 @@ func main() {
 
 	fmt.Println(table)
 	generatePermutation(keys, len(keys))
-	// fmt.Println(seatingCombinations)
-	// getMinDistances()
+	fmt.Println(seatingCombinations)
+	fmt.Println("Connection for Alice -> Bob", getLikeForTargetConnect("Alice", "Bob"))
+	fmt.Println("Connection for Alice -> David", getLikeForTargetConnect("Alice", "David"))
 }
 
 func generatePermutation(s []string, n int) {
@@ -58,30 +59,12 @@ func generatePermutation(s []string, n int) {
 	}
 }
 
-// func getMinDistances() {
-// 	max := 0
-// 	for _, v := range seatingCombinations {
-// 		dis := 0
-// 		for i := range v {
-// 			//Check if the next item is in the connections of the first item.
-// 			//If yes, retrieve its distance. That distance will be to THIS item.
-// 			if i+1 < len(v) {
-// 				dis += getLikeForTargetConnect(v[i], v[i+1])
-// 			}
-// 		}
-// 		if dis > max {
-// 			max = dis
-// 		}
-// 	}
-// 	fmt.Println("Maximum like:", max)
-// }
-//
-// func getLikeForTargetConnect(name string, neighbour string) int {
-// 	neighbours := table[name]
-// 	for _, t := range neighbours {
-// 		if t.name == neighbour {
-// 			return t.like
-// 		}
-// 	}
-// 	return 0
-// }
+func getLikeForTargetConnect(name string, neighbour string) int {
+	neighbours := table[name]
+	for _, t := range neighbours {
+		if v, ok := t[neighbour]; ok {
+			return v
+		}
+	}
+	return 0
+}
