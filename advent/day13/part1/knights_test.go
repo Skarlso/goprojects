@@ -12,6 +12,13 @@ func TestConnectionRetrieve(t *testing.T) {
 		{"Alice", "David", -2},
 	}
 
+	table = map[string][]map[string]int{
+		"Alice": {
+			map[string]int{"Bob": 54},
+			map[string]int{"David": -2},
+		},
+	}
+
 	for _, v := range testCases {
 		actual := getLikeForTargetConnect(v.input, v.neighbour)
 		if actual != v.expectedLike {
