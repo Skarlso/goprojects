@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"fmt"
 	"math"
 	"os"
 	"strconv"
@@ -54,7 +55,7 @@ func CalculatePerfectSeating() {
 		}
 	}
 	generatePermutation(keys, len(keys))
-	// fmt.Println("Best seating efficiency:", calculateSeatingEfficiancy())
+	fmt.Println("Best seating efficiency:", calculateSeatingEfficiancy())
 }
 
 func generatePermutation(s [][]byte, n int) {
@@ -84,9 +85,7 @@ func calculateSeatingEfficiancy() int {
 				left += len(v)
 			}
 			right := (i + 1) % len(v)
-			leftLike := getLikeForTargetConnect(v[i], v[left])
-			rightLike := getLikeForTargetConnect(v[i], v[right])
-			calculatedOrder += leftLike + rightLike
+			calculatedOrder += getLikeForTargetConnect(v[i], v[left]) + getLikeForTargetConnect(v[i], v[right])
 		}
 		if calculatedOrder > bestSeating {
 			bestSeating = calculatedOrder
