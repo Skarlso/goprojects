@@ -26,3 +26,9 @@ func TestConnectionRetrieve(t *testing.T) {
 		}
 	}
 }
+
+func BenchmarkCalculateSeating(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		CalculatePerfectSeating()
+	}
+}

@@ -23,6 +23,11 @@ type Person struct {
 }
 
 func main() {
+	CalculatePerfectSeating()
+}
+
+//CalculatePerfectSeating returns the perfect seating order based on Love/Hate relations
+func CalculatePerfectSeating() {
 	file, _ := os.Open("input.txt")
 	defer file.Close()
 	scanner := bufio.NewScanner(file)

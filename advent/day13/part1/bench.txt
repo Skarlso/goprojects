@@ -1,0 +1,3 @@
+================With Strings================
+20	 589571259 ns/op
+ok  	github.com/skarlso/goprojects/advent/day13/part1	11.873s
