@@ -3,7 +3,8 @@
 ok  	github.com/skarlso/goprojects/advent/day13/part1	11.873s
 
 ================With Byte but String Map=============
-
+20	 682769274 ns/op
+ok  	github.com/skarlso/goprojects/advent/day13/part1	13.751s
 
 
 ================With name mapping and Int map===========
