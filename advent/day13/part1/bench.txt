@@ -1,3 +1,13 @@
 ================With Strings================
 20	 589571259 ns/op
 ok  	github.com/skarlso/goprojects/advent/day13/part1	11.873s
+
+================With Byte but String Map=============
+
+
+
+================With name mapping and Int map===========
+BenchmarkCalculateSeating	      50	  32637879 ns/op
+ok  	github.com/skarlso/goprojects/advent/day13/part1	1.698s
+BenchmarkCalculateSeating	     100	  25817761 ns/op
+ok  	github.com/skarlso/goprojects/advent/day13/part1	2.670s

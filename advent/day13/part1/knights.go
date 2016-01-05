@@ -2,18 +2,18 @@ package main
 
 import (
 	"bufio"
-	"bytes"
-	"fmt"
 	"math"
 	"os"
 	"strconv"
+	"strings"
 
 	"github.com/skarlso/goutils/arrayutils"
 )
 
 var seatingCombinations = make([][][]byte, 0)
-var table = make(map[string][]map[string]int)
+var table = make(map[int][]map[int]int)
 var keys = make([][]byte, 0)
+var nameMapping = make(map[string]int)
 
 //Person a person
 type Person struct {
@@ -31,20 +31,30 @@ func CalculatePerfectSeating() {
 	file, _ := os.Open("input.txt")
 	defer file.Close()
 	scanner := bufio.NewScanner(file)
+	id := 0
 	for scanner.Scan() {
 		line := scanner.Text()
-		split := bytes.Split([]byte(line), []byte(" "))
-		like, _ := strconv.Atoi(string(split[3])) //If lose -> * -1
-		if string(split[2]) == "lose" {
+		split := strings.Split(line, " ")
+		trimmedNeighbour := strings.Trim(split[10], ".")
+		like, _ := strconv.Atoi(split[3]) //If lose -> * -1
+		if _, ok := nameMapping[split[0]]; !ok {
+			nameMapping[split[0]] = id
+			id++
+		}
+		if _, ok := nameMapping[trimmedNeighbour]; !ok {
+			nameMapping[trimmedNeighbour] = id
+			id++
+		}
+		if split[2] == "lose" {
 			like *= -1
 		}
-		table[string(split[0])] = append(table[string(split[0])], map[string]int{string(bytes.Trim(split[10], ".")): like})
-		if !arrayutils.ContainsByteSlice(keys, split[0]) {
-			keys = append(keys, split[0])
+		table[nameMapping[split[0]]] = append(table[nameMapping[split[0]]], map[int]int{nameMapping[trimmedNeighbour]: like})
+		if !arrayutils.ContainsByteSlice(keys, []byte(split[0])) {
+			keys = append(keys, []byte(split[0]))
 		}
 	}
 	generatePermutation(keys, len(keys))
-	fmt.Println("Best seating efficiency:", calculateSeatingEfficiancy())
+	// fmt.Println("Best seating efficiency:", calculateSeatingEfficiancy())
 }
 
 func generatePermutation(s [][]byte, n int) {
@@ -87,9 +97,9 @@ func calculateSeatingEfficiancy() int {
 }
 
 func getLikeForTargetConnect(name []byte, neighbour []byte) int {
-	neighbours := table[string(name)]
+	neighbours := table[nameMapping[string(name)]]
 	for _, t := range neighbours {
-		if v, ok := t[string(neighbour)]; ok {
+		if v, ok := t[nameMapping[string(neighbour)]]; ok {
 			return v
 		}
 	}

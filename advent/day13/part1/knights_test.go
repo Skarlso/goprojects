@@ -12,11 +12,17 @@ func TestConnectionRetrieve(t *testing.T) {
 		{"Alice", "David", -2},
 	}
 
-	table = map[string][]map[string]int{
-		"Alice": {
-			map[string]int{"Bob": 54},
-			map[string]int{"David": -2},
+	table = map[int][]map[int]int{
+		1: {
+			map[int]int{2: 54},
+			map[int]int{3: -2},
 		},
+	}
+
+	nameMapping = map[string]int{
+		"Alice": 1,
+		"Bob":   2,
+		"David": 3,
 	}
 
 	for _, v := range testCases {
