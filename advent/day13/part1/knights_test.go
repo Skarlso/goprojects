@@ -20,7 +20,7 @@ func TestConnectionRetrieve(t *testing.T) {
 	}
 
 	for _, v := range testCases {
-		actual := getLikeForTargetConnect(v.input, v.neighbour)
+		actual := getLikeForTargetConnect([]byte(v.input), []byte(v.neighbour))
 		if actual != v.expectedLike {
 			t.Errorf("Actual was: %d, Expected is:%d. For name: %s, with connection: %s\n", actual, v.expectedLike, v.input, v.neighbour)
 		}

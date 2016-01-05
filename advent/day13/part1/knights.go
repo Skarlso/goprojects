@@ -2,18 +2,18 @@ package main
 
 import (
 	"bufio"
+	"bytes"
 	"fmt"
 	"math"
 	"os"
 	"strconv"
-	"strings"
 
 	"github.com/skarlso/goutils/arrayutils"
 )
 
-var seatingCombinations = make([][]string, 0)
+var seatingCombinations = make([][][]byte, 0)
 var table = make(map[string][]map[string]int)
-var keys = make([]string, 0)
+var keys = make([][]byte, 0)
 
 //Person a person
 type Person struct {
@@ -33,13 +33,13 @@ func CalculatePerfectSeating() {
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
 		line := scanner.Text()
-		split := strings.Split(line, " ")
-		like, _ := strconv.Atoi(split[3]) //If lose -> * -1
-		if split[2] == "lose" {
+		split := bytes.Split([]byte(line), []byte(" "))
+		like, _ := strconv.Atoi(string(split[3])) //If lose -> * -1
+		if string(split[2]) == "lose" {
 			like *= -1
 		}
-		table[split[0]] = append(table[split[0]], map[string]int{strings.Trim(split[10], "."): like})
-		if !arrayutils.ContainsString(keys, split[0]) {
+		table[string(split[0])] = append(table[string(split[0])], map[string]int{string(bytes.Trim(split[10], ".")): like})
+		if !arrayutils.ContainsByteSlice(keys, split[0]) {
 			keys = append(keys, split[0])
 		}
 	}
@@ -47,9 +47,9 @@ func CalculatePerfectSeating() {
 	fmt.Println("Best seating efficiency:", calculateSeatingEfficiancy())
 }
 
-func generatePermutation(s []string, n int) {
+func generatePermutation(s [][]byte, n int) {
 	if n == 1 {
-		news := make([]string, len(s))
+		news := make([][]byte, len(s))
 		copy(news, s)
 		seatingCombinations = append(seatingCombinations, news)
 	}
@@ -86,10 +86,10 @@ func calculateSeatingEfficiancy() int {
 	return bestSeating
 }
 
-func getLikeForTargetConnect(name string, neighbour string) int {
-	neighbours := table[name]
+func getLikeForTargetConnect(name []byte, neighbour []byte) int {
+	neighbours := table[string(name)]
 	for _, t := range neighbours {
-		if v, ok := t[neighbour]; ok {
+		if v, ok := t[string(neighbour)]; ok {
 			return v
 		}
 	}
