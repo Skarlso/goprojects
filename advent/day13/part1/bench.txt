@@ -12,3 +12,7 @@ BenchmarkCalculateSeating	      50	  32637879 ns/op
 ok  	github.com/skarlso/goprojects/advent/day13/part1	1.698s
 BenchmarkCalculateSeating	     100	  25817761 ns/op
 ok  	github.com/skarlso/goprojects/advent/day13/part1	2.670s
+
+===============With int keys==================
+BenchmarkCalculateSeating	   10000	    166431 ns/op
+ok  	github.com/skarlso/goprojects/advent/day13/part1	1.695s
