@@ -69,13 +69,10 @@ func calculateSeatingEfficiancy() int {
 				left += len(v)
 			}
 			right := (i + 1) % len(v)
-			// fmt.Printf("Left: %d; Right: %d\n", left, right)
 			leftLike := getLikeForTargetConnect(v[i], v[left])
 			rightLike := getLikeForTargetConnect(v[i], v[right])
-			// fmt.Printf("Name: %s; Left:%d; Right:%d\n", v[i], leftLike, rightLike)
 			calculatedOrder += leftLike + rightLike
 		}
-		// fmt.Printf("Order for: %v; Calc:%d\n", v, calculatedOrder)
 		if calculatedOrder > bestSeating {
 			bestSeating = calculatedOrder
 		}
