@@ -22,11 +22,11 @@ type Reindeer struct {
 var reindeers = make([]*Reindeer, 0)
 
 func (r Reindeer) String() string {
-	return fmt.Sprintf("Name:%s; Speed: %d; Limit: %d; SleepDuration:%d; distanceMoved:%d; timeMoved:%d; rested:%d", r.name, r.speed, r.limit, r.sleepDuration, r.distanceMoved, r.timeMoved, r.rested)
+	return fmt.Sprintf("Name:%s; Speed: %d; Limit: %d; SleepDuration:%d; distanceMoved:%d; timeMoved:%d; rested:%d; award:%d", r.name, r.speed, r.limit, r.sleepDuration, r.distanceMoved, r.timeMoved, r.rested, r.award)
 }
 
 func init() {
-	file, _ := os.Open("test_input.txt")
+	file, _ := os.Open("input.txt")
 	defer file.Close()
 	in := bufio.NewReader(file)
 	for {
@@ -51,21 +51,22 @@ func init() {
 
 func main() {
 	startRace()
-	mostMoved := reindeers[0]
+	mostPoints := reindeers[0]
 	for _, r := range reindeers {
-		if r.distanceMoved > mostMoved.distanceMoved {
-			mostMoved = r
+		if r.award > mostPoints.award {
+			mostPoints = r
 		}
 	}
 
-	fmt.Println("Most moved reindeer:", mostMoved)
+	fmt.Println("Most moved reindeer:", mostPoints)
 }
 
 func startRace() {
-	for i := 0; i <= 1000; i++ {
+	for i := 0; i <= 2503; i++ {
 		award := gatherLeadingReindeers()
+		// fmt.Println(award)
 		for _, v := range award {
-			v.distanceMoved++
+			v.award++
 		}
 		//Check if a reindeer can move
 		//If yes, move the reindeer
