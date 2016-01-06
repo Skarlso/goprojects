@@ -16,6 +16,7 @@ type Reindeer struct {
 	distanceMoved int
 	timeMoved     int
 	rested        int
+	award         int
 }
 
 var reindeers = make([]*Reindeer, 0)
@@ -25,7 +26,7 @@ func (r Reindeer) String() string {
 }
 
 func init() {
-	file, _ := os.Open("input.txt")
+	file, _ := os.Open("test_input.txt")
 	defer file.Close()
 	in := bufio.NewReader(file)
 	for {
@@ -43,7 +44,7 @@ func init() {
 		if n == 0 {
 			continue
 		}
-		r := Reindeer{name, speed, limit, sleepDuration, 0, 0, 0}
+		r := Reindeer{name, speed, limit, sleepDuration, 0, 0, 0, 0}
 		reindeers = append(reindeers, &r)
 	}
 }
@@ -61,7 +62,11 @@ func main() {
 }
 
 func startRace() {
-	for i := 0; i <= 2503; i++ {
+	for i := 0; i <= 1000; i++ {
+		award := gatherLeadingReindeers()
+		for _, v := range award {
+			v.distanceMoved++
+		}
 		//Check if a reindeer can move
 		//If yes, move the reindeer
 		for _, rein := range reindeers {
@@ -73,6 +78,21 @@ func startRace() {
 		}
 	}
 	//Reindeer with greatest distance travelled, wins
+}
+
+func gatherLeadingReindeers() []*Reindeer {
+	var leaders []*Reindeer
+	leaders = append(leaders, reindeers[0])
+	for _, v := range reindeers {
+		if v.distanceMoved > leaders[0].distanceMoved {
+			leaders = nil
+			leaders = make([]*Reindeer, 0)
+			leaders = append(leaders, v)
+		} else if v.distanceMoved == leaders[0].distanceMoved {
+			leaders = append(leaders, v)
+		}
+	}
+	return leaders
 }
 
 func (r Reindeer) canMove() bool {
