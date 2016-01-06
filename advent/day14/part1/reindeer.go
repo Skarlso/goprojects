@@ -26,13 +26,14 @@ func init() {
 			name                string
 			speed, limit, sleep int
 		)
-		v, err := fmt.Fscanf(in, "%s can fly %d km/s for %d seconds, but then must rest for %d seconds.", &name, &speed, &limit, &sleep)
+		n, err := fmt.Fscanf(in, "%s can fly %d km/s for %d seconds, but then must rest for %d seconds.", &name, &speed, &limit, &sleep)
 		if err != nil {
 			if err == io.EOF {
 				break
 			}
 		}
-		if v == 0 {
+		//Skip if no lines were parsed
+		if n == 0 {
 			continue
 		}
 		r := Reindeer{name, speed, limit, sleep}
