@@ -5,6 +5,7 @@ import (
 	"sync"
 )
 
+//FINISH The finishline to reach.
 const FINISH = 2503
 
 //Reindeer this is a reindeer, has a name, a speed and a time it requires to rest
