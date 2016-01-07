@@ -1,12 +1,5 @@
 package main
 
-import (
-	"bufio"
-	"fmt"
-	"io"
-	"os"
-)
-
 //Ingredient cookie ingredients
 type Ingredient struct {
 	name       string
@@ -17,32 +10,51 @@ type Ingredient struct {
 	calories   int
 }
 
-var ingredients []*Ingredient
+var ingredients = []Ingredient{
+	{"Sprinkles", 2, 0, -2, 0, 3},
+	{"Butterscotch", 0, 5, -3, 0, 3},
+	{"Chocolate", 0, 0, 5, -1, 8},
+	{"Candy", 0, -1, 0, 5, 8},
+}
+var validIngredientCountCombinations = make([][]int, 0)
 
-func init() {
-	file, _ := os.Open("input.txt")
-	defer file.Close()
-	in := bufio.NewReader(file)
+func generatePossibleIngredientCombinations() {
+	var limit = 100
+	currentSeq := []int{1, 1, 1, 1}
 	for {
-		var (
-			name                                            string
-			capacity, durability, flavor, texture, calories int
-		)
-		n, err := fmt.Fscanf(in, "%s: capacity %d, durability %d, flavor %d, texture %d, calories %d", &name, &capacity, &durability, &flavor, &texture, &calories)
-		if err != nil {
-			if err == io.EOF {
-				break
-			}
+		if currentSeq[len(currentSeq)-1] == 99 {
+			break
 		}
-		//Skip if no lines were parsed
-		if n == 0 {
-			continue
+		currentSeq = incrementIngredientCount(currentSeq)
+		sum := sum(currentSeq...)
+		if sum == limit {
+			a := make([]int, len(currentSeq))
+			copy(a, currentSeq)
+			validIngredientCountCombinations = append(validIngredientCountCombinations, a)
 		}
-		i := Ingredient{name, capacity, durability, flavor, texture, calories}
-		ingredients = append(ingredients, &i)
 	}
 }
 
+func incrementIngredientCount(arr []int) []int {
+	if len(arr) == 1 {
+		arr[0] = ((arr[0] + 1) % 99) + 1
+		return arr
+	}
+	if arr[0] == 99 {
+		incrementIngredientCount(arr[1:])
+	}
+	arr[0] = ((arr[0] + 1) % 99) + 1
+	return arr
+}
+
+func sum(nums ...int) int {
+	sum := 0
+	for _, i := range nums {
+		sum += i
+	}
+	return sum
+}
+
 func main() {
-	fmt.Println("Making cookies...")
+	generatePossibleIngredientCombinations()
 }
