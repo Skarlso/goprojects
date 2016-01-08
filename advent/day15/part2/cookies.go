@@ -12,6 +12,7 @@ type Ingredient struct {
 	calories   int
 }
 
+//ingredients all the ingredients we need to make a delicious cookie
 var ingredients = []Ingredient{
 	{"Sprinkles", 2, 0, -2, 0, 3},
 	{"Butterscotch", 0, 5, -3, 0, 3},
@@ -19,6 +20,7 @@ var ingredients = []Ingredient{
 	{"Candy", 0, -1, 0, 5, 8},
 }
 
+//getScore calculate the score for a given recipe combination
 func getScore(v []int) (score int) {
 	var (
 		capacity   int
@@ -37,7 +39,8 @@ func getScore(v []int) (score int) {
 	}
 
 	// This is a more interesting approach to getting a zero value if it is a
-	// negative number.
+	// negative number than having 4 lines of ifs. Though in line size, it's
+	// the same.
 	capacity = (abs(capacity) + capacity) / 2
 	durability = (abs(durability) + durability) / 2
 	flavor = (abs(flavor) + flavor) / 2
@@ -50,15 +53,19 @@ func getScore(v []int) (score int) {
 	return
 }
 
+//generatePossibleIngredientCombinations Generates combinations of possible ingredient
+//counts by simple brute force counting.
 func generatePossibleIngredientCombinations(lenght int) {
 	var limit = 100
 	var score int
 	currentSeq := make([]int, lenght)
 	for {
+		//If the last variable is 99, we have exhausted our combination possibilities
 		if currentSeq[len(currentSeq)-1] == 99 {
 			fmt.Println("Best score:", score)
 			break
 		}
+		//Increase the next number with a recursive function
 		currentSeq = incrementIngredientCount(currentSeq)
 		sum := sum(currentSeq...)
 		if sum == limit {
@@ -70,6 +77,7 @@ func generatePossibleIngredientCombinations(lenght int) {
 	}
 }
 
+//incrementIngredientCount one by one increments number combinations
 func incrementIngredientCount(arr []int) []int {
 	if len(arr) == 1 {
 		arr[0] = ((arr[0] + 1) % 99) + 1
@@ -82,6 +90,7 @@ func incrementIngredientCount(arr []int) []int {
 	return arr
 }
 
+//sum sums an arbitary number of ints
 func sum(nums ...int) int {
 	sum := 0
 	for _, i := range nums {
@@ -90,6 +99,7 @@ func sum(nums ...int) int {
 	return sum
 }
 
+//abs absolute value
 func abs(x int) int {
 	switch {
 	case x < 0:
