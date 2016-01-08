@@ -1,8 +1,11 @@
-package solutions
+package main
 
 import (
 	"fmt"
 	"io/ioutil"
+	"os"
+
+	"github.com/ajstarks/svgo"
 )
 
 //Location Defines a Santa whether he is human or not
@@ -49,27 +52,41 @@ func (rs *RobotSanta) Move(direction byte) {
 }
 
 //DeliverPresents counts how many houses got presents this year
-func DeliverPresents() {
+func main() {
 	//Read in file input
-	fileContent, err := ioutil.ReadFile("solutions/present_input.txt")
+	fileContent, err := ioutil.ReadFile("present_input.txt")
 	if err != nil {
 		panic(err)
 	}
 
-	hs := &HumanSanta{0, 0}
-	rs := &RobotSanta{0, 0}
-	l := Location{0, 0}
+	f, _ := os.Create("day1.svg")
+	defer f.Close()
+	width := 120
+	height := 120
+	canvas := svg.New(f)
+	canvas.Start(width, height)
+	defer canvas.End()
+
+	hs := &HumanSanta{30, 30}
+	rs := &RobotSanta{30, 30}
+	l := Location{30, 30}
 	//Playing field
 	var field = make(map[Location]bool, 0)
 	field[l] = true
 	//Moving Santa
 	for i, v := range fileContent {
 		if i&1 == 1 {
+			origX := hs.x
+			origY := hs.y
 			hs.Move(v)
+			canvas.Line(origX, origY, hs.x, hs.y, "fill: red; stroke: blue; stroke-width: 1")
 			l = Location{hs.x, hs.y}
 			field[l] = true
 		} else {
+			origX := rs.x
+			origY := rs.y
 			rs.Move(v)
+			canvas.Line(origX, origY, rs.x, rs.y, "fill: blue; stroke: red; stroke-width: 1")
 			l = Location{rs.x, rs.y}
 			field[l] = true
 		}
