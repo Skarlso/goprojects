@@ -23,7 +23,7 @@ var validIngredientCountCombinations = make([][]int, 0)
 
 func countBestCookieRecipe() {
 	bestrecipe := 0
-	// calorieTotal := 0
+
 	for _, v := range validIngredientCountCombinations {
 
 		var (
@@ -31,7 +31,7 @@ func countBestCookieRecipe() {
 			durability int
 			flavor     int
 			texture    int
-			// calories   int
+			calories   int
 		)
 
 		for i := range ingredients {
@@ -39,6 +39,7 @@ func countBestCookieRecipe() {
 			durability += ingredients[i].durability * v[i]
 			flavor += ingredients[i].flavor * v[i]
 			texture += ingredients[i].texture * v[i]
+			calories += ingredients[i].calories * v[i]
 		}
 
 		// This is a more interesting approach to getting a zero value if it is a
@@ -49,7 +50,7 @@ func countBestCookieRecipe() {
 		texture = (abs(texture) + texture) / 2
 
 		recipe := capacity * durability * flavor * texture
-		if recipe > bestrecipe {
+		if recipe > bestrecipe && calories == 500 {
 			bestrecipe = recipe
 		}
 	}
