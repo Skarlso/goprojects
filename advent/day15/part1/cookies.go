@@ -19,19 +19,14 @@ var ingredients = []Ingredient{
 	{"Candy", 0, -1, 0, 5, 8},
 }
 
-var validIngredientCountCombinations = make([][]int, 0)
-
-func countBestCookieRecipe() {
+func countBestCookieRecipe(in chan []int, done chan int) {
 	bestrecipe := 0
-	// calorieTotal := 0
-	for _, v := range validIngredientCountCombinations {
-
+	for v := range in {
 		var (
 			capacity   int
 			durability int
 			flavor     int
 			texture    int
-			// calories   int
 		)
 
 		for i := range ingredients {
@@ -53,10 +48,11 @@ func countBestCookieRecipe() {
 			bestrecipe = recipe
 		}
 	}
-	fmt.Println("Best combination: ", bestrecipe)
+	done <- bestrecipe
 }
 
-func generatePossibleIngredientCombinations(lenght int) {
+func generatePossibleIngredientCombinations(lenght int, out chan []int) {
+	defer close(out)
 	var limit = 100
 	currentSeq := make([]int, lenght)
 	for {
@@ -68,7 +64,7 @@ func generatePossibleIngredientCombinations(lenght int) {
 		if sum == limit {
 			a := make([]int, len(currentSeq))
 			copy(a, currentSeq)
-			validIngredientCountCombinations = append(validIngredientCountCombinations, a)
+			out <- a
 		}
 	}
 }
@@ -104,7 +100,10 @@ func abs(x int) int {
 }
 
 func main() {
-	generatePossibleIngredientCombinations(len(ingredients))
-	// fmt.Println(validIngredientCountCombinations)
-	countBestCookieRecipe()
+	ch := make(chan []int, 100)
+	best := make(chan int)
+	defer close(best)
+	go generatePossibleIngredientCombinations(len(ingredients), ch)
+	go countBestCookieRecipe(ch, best)
+	fmt.Println("Best combination: ", <-best)
 }

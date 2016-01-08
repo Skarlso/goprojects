@@ -19,57 +19,53 @@ var ingredients = []Ingredient{
 	{"Candy", 0, -1, 0, 5, 8},
 }
 
-var validIngredientCountCombinations = make([][]int, 0)
+func getScore(v []int) (score int) {
+	var (
+		capacity   int
+		durability int
+		flavor     int
+		texture    int
+		calories   int
+	)
 
-func countBestCookieRecipe() {
-	bestrecipe := 0
-
-	for _, v := range validIngredientCountCombinations {
-
-		var (
-			capacity   int
-			durability int
-			flavor     int
-			texture    int
-			calories   int
-		)
-
-		for i := range ingredients {
-			capacity += ingredients[i].capacity * v[i]
-			durability += ingredients[i].durability * v[i]
-			flavor += ingredients[i].flavor * v[i]
-			texture += ingredients[i].texture * v[i]
-			calories += ingredients[i].calories * v[i]
-		}
-
-		// This is a more interesting approach to getting a zero value if it is a
-		// negative number.
-		capacity = (abs(capacity) + capacity) / 2
-		durability = (abs(durability) + durability) / 2
-		flavor = (abs(flavor) + flavor) / 2
-		texture = (abs(texture) + texture) / 2
-
-		recipe := capacity * durability * flavor * texture
-		if recipe > bestrecipe && calories == 500 {
-			bestrecipe = recipe
-		}
+	for i := range ingredients {
+		capacity += ingredients[i].capacity * v[i]
+		durability += ingredients[i].durability * v[i]
+		flavor += ingredients[i].flavor * v[i]
+		texture += ingredients[i].texture * v[i]
+		calories += ingredients[i].calories * v[i]
 	}
-	fmt.Println("Best combination: ", bestrecipe)
+
+	// This is a more interesting approach to getting a zero value if it is a
+	// negative number.
+	capacity = (abs(capacity) + capacity) / 2
+	durability = (abs(durability) + durability) / 2
+	flavor = (abs(flavor) + flavor) / 2
+	texture = (abs(texture) + texture) / 2
+
+	recipe := capacity * durability * flavor * texture
+	if calories == 500 {
+		score = recipe
+	}
+	return
 }
 
 func generatePossibleIngredientCombinations(lenght int) {
 	var limit = 100
+	var score int
 	currentSeq := make([]int, lenght)
 	for {
 		if currentSeq[len(currentSeq)-1] == 99 {
+			fmt.Println("Best score:", score)
 			break
 		}
 		currentSeq = incrementIngredientCount(currentSeq)
 		sum := sum(currentSeq...)
 		if sum == limit {
-			a := make([]int, len(currentSeq))
-			copy(a, currentSeq)
-			validIngredientCountCombinations = append(validIngredientCountCombinations, a)
+			currentScore := getScore(currentSeq)
+			if currentScore > score {
+				score = currentScore
+			}
 		}
 	}
 }
@@ -106,6 +102,4 @@ func abs(x int) int {
 
 func main() {
 	generatePossibleIngredientCombinations(len(ingredients))
-	// fmt.Println(validIngredientCountCombinations)
-	countBestCookieRecipe()
 }
