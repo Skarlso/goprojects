@@ -8,7 +8,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/Skarlso/goutils/arrayutils"
+	"github.com/skarlso/goutils/arrayutils"
 )
 
 var connections = make(map[string][]Targets)
