@@ -3,6 +3,9 @@ package main
 import (
 	"fmt"
 	"io/ioutil"
+	"os"
+
+	"github.com/ajstarks/svgo"
 )
 
 //Location defines coordinates on a grid
@@ -122,12 +125,31 @@ func countOnLights() (count int) {
 	return
 }
 
+func drawState(n int, grid [][]bool) {
+	f, _ := os.Create(fmt.Sprintf("step%d.svg", n))
+	defer f.Close()
+	width := 100
+	height := 100
+	canvas := svg.New(f)
+	canvas.Start(width, height)
+	for i := range grid {
+		for j := range grid[i] {
+			if grid[i][j] {
+				canvas.Rect(i, j, 10, 10, "fill:red;stroke:red;")
+			} else {
+				canvas.Rect(i, j, 10, 10, "fill:black;stroke:black;")
+			}
+		}
+	}
+	canvas.End()
+}
+
 //main main function
 func main() {
-
 	//Step the grid 'LIMIT' times
 	for i := 0; i < LIMIT; i++ {
 		lightGrid = animate(lightGrid)
+		drawState(i, lightGrid)
 	}
 	fmt.Println("Lights which are on:", countOnLights())
 }
