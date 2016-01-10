@@ -33,6 +33,7 @@ var (
 	}
 )
 
+//Fill in the grid
 func init() {
 	fileContent, err := ioutil.ReadFile("input.txt")
 	if err != nil {
@@ -61,23 +62,29 @@ func init() {
 //This is returning a grid because otherwise it was overwriting the wrong way.
 //Since slices are mutable it was leaving my Grid in an inconsistante state.
 func animate(grid [][]bool) [][]bool {
+	//Make a copy of the main grid
 	innerGrid := make([][]bool, len(grid))
 
 	for i := 0; i < len(grid); i++ {
 		innerGrid[i] = make([]bool, len(grid))
 	}
 
+	//Switch on|off lights based on the given rules
 	for i := range grid {
 		for j := range grid[i] {
 			innerGrid[i][j] = animateLightAt(grid, i, j)
 		}
 	}
+	//Return the new grid with the correct values
 	return innerGrid
 }
 
+//animateLightAt changes a light according to the game rules
 func animateLightAt(grid [][]bool, x, y int) bool {
 	onCount := 0
 	currentLight := grid[x][y]
+
+	//Collect the number of turned on lights around x,y.
 	for _, v := range corners {
 		newX := x + v.x
 		newY := y + v.y
@@ -102,6 +109,7 @@ func animateLightAt(grid [][]bool, x, y int) bool {
 	return false
 }
 
+//countOnLights counts the 'on' state Lights
 func countOnLights() (count int) {
 	for i := 0; i < GRIDX; i++ {
 		for j := 0; j < GRIDY; j++ {
@@ -114,7 +122,10 @@ func countOnLights() (count int) {
 	return
 }
 
+//main main function
 func main() {
+
+	//Step the grid 'LIMIT' times
 	for i := 0; i < LIMIT; i++ {
 		lightGrid = animate(lightGrid)
 	}
