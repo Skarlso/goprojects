@@ -88,6 +88,17 @@ func animateLightAt(grid [][]bool, x, y int) bool {
 		}
 	}
 
+	switch {
+	case x == 0 && y == 0:
+		return true
+	case x == GRIDX-1 && y == GRIDY-1:
+		return true
+	case x == 0 && y == GRIDY-1:
+		return true
+	case x == GRIDX-1 && y == 0:
+		return true
+	}
+
 	if currentLight {
 		if onCount == 2 || onCount == 3 {
 			return true
