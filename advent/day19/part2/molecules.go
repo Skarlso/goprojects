@@ -8,11 +8,13 @@ import (
 )
 
 var replacements = make(map[string][]string)
-var endResult = "CRnCaCaCaSiRnBPTiMgArSiRnSiRnMgArSiRnCaFArTiTiBSiThFYCaFArCaCaSiThCaPBSiThSiThCaCaPTiRnPBSiThRnFArArCaCaSiThCaSiThSiRnMgArCaPTiBPRnFArSiThCaSiRnFArBCaSiRnCaPRnFArPMgYCaFArCaPTiTiTiBPBSiThCaPTiBPBSiRnFArBPBSiRnCaFArBPRnSiRnFArRnSiRnBFArCaFArCaCaCaSiThSiThCaCaPBPTiTiRnFArCaPTiBSiAlArPBCaCaCaCaCaSiRnMgArCaSiThFArThCaSiThCaSiRnCaFYCaSiRnFYFArFArCaSiRnFYFArCaSiRnBPMgArSiThPRnFArCaSiRnFArTiRnSiRnFYFArCaSiRnBFArCaSiRnTiMgArSiThCaSiThCaFArPRnFArSiRnFArTiTiTiTiBCaCaSiRnCaCaFYFArSiThCaPTiBPTiBCaSiThSiRnMgArCaF"
+
+// var endResult = "CRnCaCaCaSiRnBPTiMgArSiRnSiRnMgArSiRnCaFArTiTiBSiThFYCaFArCaCaSiThCaPBSiThSiThCaCaPTiRnPBSiThRnFArArCaCaSiThCaSiThSiRnMgArCaPTiBPRnFArSiThCaSiRnFArBCaSiRnCaPRnFArPMgYCaFArCaPTiTiTiBPBSiThCaPTiBPBSiRnFArBPBSiRnCaFArBPRnSiRnFArRnSiRnBFArCaFArCaCaCaSiThSiThCaCaPBPTiTiRnFArCaPTiBSiAlArPBCaCaCaCaCaSiRnMgArCaSiThFArThCaSiThCaSiRnCaFYCaSiRnFYFArFArCaSiRnFYFArCaSiRnBPMgArSiThPRnFArCaSiRnFArTiRnSiRnFYFArCaSiRnBFArCaSiRnTiMgArSiThCaSiThCaFArPRnFArSiRnFArTiTiTiTiBCaCaSiRnCaCaFYFArSiThCaPTiBPTiBCaSiThSiRnMgArCaF"
+var endResult = "HOH"
 
 //init Loads in the strings from the input file
 func init() {
-	file, _ := os.Open("input.txt")
+	file, _ := os.Open("test_input.txt")
 	defer file.Close()
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
@@ -45,22 +47,28 @@ func allIndiciesForString(s, in string) (indicies []int) {
 }
 
 func replaceReq(s string, step int) {
-	// fmt.Println("Current step:", s)
-	for k := range replacements {
+	for k, v := range replacements {
 		indexes := allIndiciesForString(k, s)
-		// fmt.Println(indexes)
+		// fmt.Println(k)
 		for _, i := range indexes {
-			for _, rep := range replacements[k] {
+			for _, rep := range v {
+				fmt.Println("rep:", rep)
+				fmt.Println("s before replace:", s)
 				head := s[:i]
 				tail := s[i+len(k):]
 				s = head + rep + tail
 				if s != endResult {
 					fmt.Println("Current step:", s)
 					step++
+					if step >= 4 {
+						fmt.Println("FOUND")
+						break
+					}
 					replaceReq(s, step)
-				} else {
-					fmt.Println("Found: ", step)
-					return
+				} else if s == endResult {
+					fmt.Println("================", step)
+					os.Exit(1)
+					break
 				}
 			}
 		}
