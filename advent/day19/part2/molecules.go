@@ -4,10 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
-	"sort"
 	"strings"
-
-	"github.com/skarlso/goutils/arrayutils"
 )
 
 var replacements = make(map[string][]string)
@@ -29,6 +26,7 @@ func init() {
 			replacements[mol] = append(replacements[mol], replace)
 		}
 	}
+	fmt.Println(replacements)
 }
 
 //allIndiciesForString finds all the indexes for a given string
@@ -46,38 +44,29 @@ func allIndiciesForString(s, in string) (indicies []int) {
 	return
 }
 
-//replace does the replacing
-func replace() {
-	steps := 0
-	keys := make([]string, 0, len(replacements))
+func replaceReq(s string, step int) {
+	// fmt.Println("Current step:", s)
 	for k := range replacements {
-		keys = append(keys, k)
-	}
-	sort.Strings(keys)
-	keys = arrayutils.ReverseString(keys)
-	startingPoints := replacements["e"]
-	for _, stp := range startingPoints {
-		molecule := stp
-		for _, k := range keys {
-			if k == "e" {
-				continue
-			}
-
-			for _, com := range replacements[k] {
-				molecule = strings.Replace(molecule, k, com, -1)
-				fmt.Println(molecule)
-				if molecule == endResult {
-					fmt.Println("Sortest:", steps)
+		indexes := allIndiciesForString(k, s)
+		// fmt.Println(indexes)
+		for _, i := range indexes {
+			for _, rep := range replacements[k] {
+				head := s[:i]
+				tail := s[i+len(k):]
+				s = head + rep + tail
+				if s != endResult {
+					fmt.Println("Current step:", s)
+					step++
+					replaceReq(s, step)
 				} else {
-					steps++
+					fmt.Println("Found: ", step)
+					return
 				}
 			}
 		}
-
 	}
-	fmt.Println("Steps:", steps)
 }
 
 func main() {
-	replace()
+	replaceReq("e", 0)
 }
