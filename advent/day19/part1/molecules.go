@@ -5,11 +5,13 @@ import (
 	"fmt"
 	"os"
 	"strings"
+
+	"github.com/skarlso/goutils/arrayutils"
 )
 
 var molecule = "CRnCaCaCaSiRnBPTiMgArSiRnSiRnMgArSiRnCaFArTiTiBSiThFYCaFArCaCaSiThCaPBSiThSiThCaCaPTiRnPBSiThRnFArArCaCaSiThCaSiThSiRnMgArCaPTiBPRnFArSiThCaSiRnFArBCaSiRnCaPRnFArPMgYCaFArCaPTiTiTiBPBSiThCaPTiBPBSiRnFArBPBSiRnCaFArBPRnSiRnFArRnSiRnBFArCaFArCaCaCaSiThSiThCaCaPBPTiTiRnFArCaPTiBSiAlArPBCaCaCaCaCaSiRnMgArCaSiThFArThCaSiThCaSiRnCaFYCaSiRnFYFArFArCaSiRnFYFArCaSiRnBPMgArSiThPRnFArCaSiRnFArTiRnSiRnFYFArCaSiRnBFArCaSiRnTiMgArSiThCaSiThCaFArPRnFArSiRnFArTiTiTiTiBCaCaSiRnCaCaFYFArSiThCaPTiBPTiBCaSiThSiRnMgArCaF"
 var combinations []string
-var replacements = make(map[string]string)
+var replacements = make(map[string][]string)
 
 func init() {
 	file, _ := os.Open("input.txt")
@@ -21,32 +23,39 @@ func init() {
 		var replace string
 		split := strings.Split(line, "=>")
 		if len(split) > 1 {
-			fmt.Println(split)
 			mol = strings.Trim(split[0], " ")
 			replace = strings.Trim(split[1], " ")
-			replacements[mol] = replace
+			replacements[mol] = append(replacements[mol], replace)
 		}
 	}
+	fmt.Println(replacements)
+}
+
+func allIndiciesForString(s, in string) (indicies []int) {
+	index := strings.Index(in, s)
+	offset := 0
+	for index > -1 {
+		indicies = append(indicies, index+offset)
+		offset += len(in[:index]) + 1
+		in = in[index+len(s):]
+		index = strings.Index(in, s)
+	}
+
+	return
 }
 
 func replace() {
-	// for i, v := range molecule {
-	// 	split := strings.Split(molecule, "")
-	// 	split[i] = replacements[string(v)]
-	// 	newComb := strings.Join(split, "")
-	// 	if !arrayutils.ContainsString(combinations, newComb) {
-	// 		combinations = append(combinations, newComb)
-	// 	}
-	// }
 	for k, v := range replacements {
-		for i, v := range strings.Split(molecule, "") {
-			if v == k {
-				//replace...
+		indexes := allIndiciesForString(k, molecule)
+		for _, i := range indexes {
+			head := molecule[:i]
+			tail := molecule[i+len(k):]
+			for _, com := range v {
+				newMol := head + com + tail
+				if !arrayutils.ContainsString(combinations, newMol) {
+					combinations = append(combinations, newMol)
+				}
 			}
-			// newComb := strings.Join(split, "")
-			// if !arrayutils.ContainsString(combinations, newComb) {
-			// 	combinations = append(combinations, newComb)
-			// }
 		}
 	}
 }
