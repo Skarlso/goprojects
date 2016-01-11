@@ -5,8 +5,6 @@ import (
 	"fmt"
 	"os"
 	"strings"
-
-	"github.com/skarlso/goutils/arrayutils"
 )
 
 var molecule = "CRnCaCaCaSiRnBPTiMgArSiRnSiRnMgArSiRnCaFArTiTiBSiThFYCaFArCaCaSiThCaPBSiThSiThCaCaPTiRnPBSiThRnFArArCaCaSiThCaSiThSiRnMgArCaPTiBPRnFArSiThCaSiRnFArBCaSiRnCaPRnFArPMgYCaFArCaPTiTiTiBPBSiThCaPTiBPBSiRnFArBPBSiRnCaFArBPRnSiRnFArRnSiRnBFArCaFArCaCaCaSiThSiThCaCaPBPTiTiRnFArCaPTiBSiAlArPBCaCaCaCaCaSiRnMgArCaSiThFArThCaSiThCaSiRnCaFYCaSiRnFYFArFArCaSiRnFYFArCaSiRnBPMgArSiThPRnFArCaSiRnFArTiRnSiRnFYFArCaSiRnBFArCaSiRnTiMgArSiThCaSiThCaFArPRnFArSiRnFArTiTiTiTiBCaCaSiRnCaCaFYFArSiThCaPTiBPTiBCaSiThSiRnMgArCaF"
@@ -32,12 +30,23 @@ func init() {
 }
 
 func replace() {
-	for i, v := range molecule {
-		split := strings.Split(molecule, "")
-		split[i] = replacements[string(v)]
-		newComb := strings.Join(split, "")
-		if !arrayutils.ContainsString(combinations, newComb) {
-			combinations = append(combinations, newComb)
+	// for i, v := range molecule {
+	// 	split := strings.Split(molecule, "")
+	// 	split[i] = replacements[string(v)]
+	// 	newComb := strings.Join(split, "")
+	// 	if !arrayutils.ContainsString(combinations, newComb) {
+	// 		combinations = append(combinations, newComb)
+	// 	}
+	// }
+	for k, v := range replacements {
+		for i, v := range strings.Split(molecule, "") {
+			if v == k {
+				//replace...
+			}
+			// newComb := strings.Join(split, "")
+			// if !arrayutils.ContainsString(combinations, newComb) {
+			// 	combinations = append(combinations, newComb)
+			// }
 		}
 	}
 }
