@@ -12,33 +12,38 @@ var elves = make([]Elf, 0)
 
 //Elf represents either a pointed eared wise a** or a little fellow delivering presents
 type Elf struct {
-	multiplier int
+	elfNumber int
 }
 
 func main() {
-	i := 1
+	houseNumber := 1
 	for {
-		newElf := Elf{i}
+		houses[houseNumber] = 0
+		newElf := Elf{houseNumber}
 		elves = append(elves, newElf)
 		for _, e := range elves {
-			houses[e.multiplier] += e.multiplier * 10
+			if houseNumber%e.elfNumber == 0 {
+				houses[houseNumber] += e.elfNumber * 10
+				if houses[houseNumber] >= LIMIT {
+					fmt.Println("Found house with limit: ", houseNumber)
+					return
+				}
+			}
 		}
-		i++
-
-		if limitReached() {
-			break
-		}
+		houseNumber++
 	}
+	// fmt.Println("houses:", houses)
+	// fmt.Println("elves:", elves)
 
 }
 
-func limitReached() bool {
-	for k, v := range houses {
-		if v == LIMIT {
-			fmt.Println("Limit reached, with key: ", k)
-			return true
-		}
-	}
-
-	return false
-}
+// func limitReached() bool {
+// 	for k, v := range houses {
+// 		if v >= LIMIT {
+// 			fmt.Println("Limit reached, with key: ", k)
+// 			return true
+// 		}
+// 	}
+//
+// 	return false
+// }
