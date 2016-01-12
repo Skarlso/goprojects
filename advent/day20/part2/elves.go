@@ -15,6 +15,8 @@ func main() {
 			houseNum++
 			if houseNum < 50 {
 				houses[j] += i * 11
+			} else {
+				break
 			}
 		}
 	}
