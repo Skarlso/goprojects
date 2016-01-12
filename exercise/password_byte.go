@@ -1,23 +1,20 @@
-package solutions
+package main
 
-import (
-	"fmt"
-	"regexp"
-)
+import "regexp"
 
 var passwordInputChan = [8]byte{'h', 'x', 'b', 'x', 'x', 'y', 'z', 'z'}
 
 //GenerateNewPasswordChan generates a new password for Santa
-func main() {
-	generatedPassword := make(chan [8]byte, 100)
-	correctPassword := make(chan [8]byte)
-	defer close(generatedPassword)
-	defer close(correctPassword)
-	go incrementalPasswordGenerateChan(generatedPassword)
-	go checkCorrectnessChan(generatedPassword, correctPassword)
-	pass := <-correctPassword
-	fmt.Println(string(pass[:]))
-}
+// func main() {
+// 	generatedPassword := make(chan [8]byte, 100)
+// 	correctPassword := make(chan [8]byte)
+// 	defer close(generatedPassword)
+// 	defer close(correctPassword)
+// 	go incrementalPasswordGenerateChan(generatedPassword)
+// 	go checkCorrectnessChan(generatedPassword, correctPassword)
+// 	pass := <-correctPassword
+// 	fmt.Println(string(pass[:]))
+// }
 
 func checkCorrectnessChan(input <-chan [8]byte, output chan<- [8]byte) {
 	//Could use range here as it's an infinite loop anyways
