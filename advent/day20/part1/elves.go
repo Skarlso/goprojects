@@ -1,7 +1,5 @@
 package main
 
-import "fmt"
-
 const (
 	//LIMIT is the limit for a house's present. More than enough presents...
 	LIMIT = 34000000
@@ -18,32 +16,40 @@ type Elf struct {
 func main() {
 	houseNumber := 1
 	for {
-		houses[houseNumber] = 0
-		newElf := Elf{houseNumber}
-		elves = append(elves, newElf)
-		for _, e := range elves {
-			if houseNumber%e.elfNumber == 0 {
-				houses[houseNumber] += e.elfNumber * 10
-				if houses[houseNumber] >= LIMIT {
-					fmt.Println("Found house with limit: ", houseNumber)
-					return
-				}
-			}
-		}
+		//houseNumber and all of it's dividents * 10.
+		// 6's dividents -> 6, 3, 2, 1 -> 6 + 3 + 2 + 1 -> 6 + 6 -> 12
 		houseNumber++
 	}
-	// fmt.Println("houses:", houses)
-	// fmt.Println("elves:", elves)
-
 }
 
-// func limitReached() bool {
-// 	for k, v := range houses {
-// 		if v >= LIMIT {
-// 			fmt.Println("Limit reached, with key: ", k)
-// 			return true
+// func main() {
+// 	houseNumber := 1
+// 	done := make(chan bool)
+// 	for {
+// 		houses[houseNumber] = 0
+// 		go visitHouses(houseNumber, done)
+// 		houseNumber++
+// 		if <-done {
+// 			break
 // 		}
 // 	}
+// 	// fmt.Println("houses:", houses)
+// 	// fmt.Println("elves:", elves)
 //
-// 	return false
+// }
+//
+// func visitHouses(houseNumber int, done chan bool) {
+// 	newElf := Elf{houseNumber}
+// 	elves = append(elves, newElf)
+// 	for _, e := range elves {
+// 		if houseNumber%e.elfNumber == 0 {
+// 			houses[houseNumber] += e.elfNumber * 10
+// 			// fmt.Println("House number and value:", houseNumber, houses[houseNumber])
+// 			if houses[houseNumber] >= LIMIT {
+// 				fmt.Println("Found house with limit: ", houseNumber)
+// 				done <- true
+// 			}
+// 		}
+// 	}
+// 	done <- false
 // }
