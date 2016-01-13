@@ -61,6 +61,7 @@ func init() {
 			4: {"Greataxe", 74, 8},
 		},
 		armors: map[int]Armor{
+			0: {"Nothing", 0, 0},
 			1: {"Leather", 13, 1},
 			2: {"Chainmail", 31, 2},
 			3: {"Splintmail", 53, 3},
@@ -68,11 +69,13 @@ func init() {
 			5: {"Platemail", 102, 5},
 		},
 		defenseRings: map[int]DefenseRing{
+			0: {"Nothing", 0, 0},
 			1: {"Defense +1", 20, 1},
 			2: {"Defense +2", 40, 2},
 			3: {"Defense +3", 80, 3},
 		},
 		damageRings: map[int]DamageRing{
+			0: {"Nothing", 0, 0},
 			1: {"Damage +1", 25, 1},
 			2: {"Damage +2", 50, 2},
 			3: {"Damage +3", 100, 3},
@@ -98,32 +101,19 @@ func main() {
 		weapondmg = v.damage
 		cWeapond = v.cost
 		for a := 0; a <= len(shop.armors); a++ {
-			if _, ok := shop.armors[a]; ok {
-				fmt.Println("Starting game with armor:", shop.armors[a].name)
-				armor = shop.armors[a].armor
-				cArmor = shop.armors[a].cost
-			} else {
-				armor = 0
-				cArmor = 0
-			}
+			fmt.Println("Starting game with armor:", shop.armors[a].name)
+			armor = shop.armors[a].armor
+			cArmor = shop.armors[a].cost
 			for defr := 0; defr <= len(shop.defenseRings); defr++ {
-				if _, ok := shop.defenseRings[defr]; ok {
-					fmt.Println("Starting game with defense ring:", shop.defenseRings[defr].name)
-					defring = shop.defenseRings[defr].defense
-					cDefRing = shop.defenseRings[defr].cost
-				} else {
-					defring = 0
-					cDefRing = 0
-				}
+				fmt.Println("Starting game with defense ring:", shop.defenseRings[defr].name)
+				defring = shop.defenseRings[defr].defense
+				cDefRing = shop.defenseRings[defr].cost
 				for dmgr := 0; dmgr <= len(shop.damageRings); dmgr++ {
-					if _, ok := shop.damageRings[dmgr]; ok {
-						fmt.Println("Starting game with damage ring:", shop.damageRings[dmgr].name)
-						dmgring = shop.damageRings[dmgr].damage
-						cDmgRing = shop.damageRings[dmgr].cost
-					} else {
-						dmgring = 0
-						cDmgRing = 0
-					}
+
+					fmt.Println("Starting game with damage ring:", shop.damageRings[dmgr].name)
+					dmgring = shop.damageRings[dmgr].damage
+					cDmgRing = shop.damageRings[dmgr].cost
+
 					moneySpent := cWeapond + cArmor + cDefRing + cDmgRing
 					playersTurn := true
 
