@@ -1,9 +1,6 @@
 package main
 
-import (
-	"fmt"
-	"math"
-)
+import "fmt"
 
 //Boss The Baus
 type Boss struct {
@@ -63,7 +60,6 @@ func init() {
 			3: {"Longsword", 40, 7},
 			4: {"Greataxe", 74, 8},
 		},
-		//Starts from 1 because 0 will mark that it's an optional buy
 		armors: map[int]Armor{
 			1: {"Leather", 13, 1},
 			2: {"Chainmail", 31, 2},
@@ -71,13 +67,11 @@ func init() {
 			4: {"Bandedmail", 75, 4},
 			5: {"Platemail", 102, 5},
 		},
-		//Starts from 1 because 0 will mark that it's an optional buy
 		defenseRings: map[int]DefenseRing{
 			1: {"Defense +1", 20, 1},
 			2: {"Defense +2", 40, 2},
 			3: {"Defense +3", 80, 3},
 		},
-		//Starts from 1 because 0 will mark that it's an optional buy
 		damageRings: map[int]DamageRing{
 			1: {"Damage +1", 25, 1},
 			2: {"Damage +2", 50, 2},
@@ -87,7 +81,7 @@ func init() {
 }
 
 func main() {
-	smallestCost := math.MaxInt64
+	leastSpent := 0
 	var (
 		weapondmg int
 		armor     int
@@ -153,9 +147,9 @@ func main() {
 						}
 					}
 
-					if player.hp > 0 {
-						if moneySpent < smallestCost {
-							smallestCost = moneySpent
+					if player.hp <= 0 {
+						if moneySpent > leastSpent {
+							leastSpent = moneySpent
 						}
 					}
 
@@ -163,7 +157,7 @@ func main() {
 			}
 		}
 
-		fmt.Println("Smallest cost spent on a win:", smallestCost)
+		fmt.Println("Smallest cost spent on a win:", leastSpent)
 	}
 }
 func (p *Player) attack(b *Boss) {
