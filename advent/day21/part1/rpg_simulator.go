@@ -1,5 +1,7 @@
 package main
 
+import "fmt"
+
 //Boss The Baus
 type Boss struct {
 	hp, dmg, armor int
@@ -17,7 +19,7 @@ type Inventory struct {
 //Player The Playa
 type Player struct {
 	Inventory
-	hp, dmg, armor int
+	hp, dmg, armor, moneySpent int
 }
 
 //Weapon weapon's representation with damage and cost
@@ -56,13 +58,12 @@ type Shop struct {
 	damageRings  []DamageRing
 }
 
-var player Player
-var boss Boss
+var player *Player
+var boss *Boss
 var shop Shop
+var itemCombinations []int
 
 func init() {
-	player = Player{hp: 100, dmg: 0, armor: 0, Inventory: Inventory{}}
-	boss = Boss{hp: 103, dmg: 9, armor: 2}
 	shop = Shop{
 		weapons: []Weapon{
 			Weapon{"Dagger", 4, 8},
@@ -91,6 +92,58 @@ func init() {
 	}
 }
 
-func main() {
+func setupGame() {
+	player = &Player{hp: 100, dmg: 0, armor: 0, moneySpent: 0, Inventory: Inventory{}}
+	boss = &Boss{hp: 103, dmg: 9, armor: 2}
+}
 
+func getItemCombinations() {
+
+}
+
+func main() {
+	playerWon := false
+	for !playerWon {
+		setupGame()
+		player.buyItems()
+		playersTurn := true
+		for player.hp > 0 && boss.hp > 0 {
+			fmt.Printf("Player's hp:%d | Boss hp:%d \n", player.hp, boss.hp)
+			switch playersTurn {
+			case true:
+				player.attack(boss)
+				playersTurn = false
+			case false:
+				boss.attack(player)
+				playersTurn = true
+			}
+		}
+
+		if player.hp > 0 {
+			playerWon = true
+		}
+	}
+}
+
+func (p *Player) buyItems() {
+	p.dmg += shop.weapons[4].damage
+	p.moneySpent += shop.weapons[4].cost
+	p.armor += shop.armors[0].armor
+	p.moneySpent += shop.armors[0].cost
+}
+
+func (p *Player) attack(b *Boss) {
+	dmg := p.dmg - b.armor
+	if dmg <= 0 {
+		dmg = 1
+	}
+	b.hp -= dmg
+}
+
+func (b *Boss) attack(p *Player) {
+	dmg := b.dmg - p.armor
+	if dmg <= 0 {
+		dmg = 1
+	}
+	p.hp -= dmg
 }
