@@ -5,13 +5,8 @@ import (
 	"math"
 )
 
-//Boss The Baus
-type Boss struct {
-	hp, dmg, armor int
-}
-
-//Player The Playa
-type Player struct {
+//Character represents the Boss and The Playa as well.
+type Character struct {
 	hp, dmg, armor int
 }
 
@@ -123,8 +118,8 @@ func main() {
 					moneySpent := cWeapond + cArmor + cDefRing + cDmgRing
 					playersTurn := true
 
-					player := &Player{hp: 100, dmg: weapondmg + dmgring, armor: armor + defring}
-					boss := &Boss{hp: 103, dmg: 9, armor: 2}
+					player := &Character{hp: 100, dmg: weapondmg + dmgring, armor: armor + defring}
+					boss := &Character{hp: 103, dmg: 9, armor: 2}
 					fmt.Println("Player:", *player)
 					fmt.Println("Boss:", *boss)
 					for {
@@ -156,18 +151,11 @@ func main() {
 		fmt.Println("Smallest cost spent on a win:", smallestCost)
 	}
 }
-func (p *Player) attack(b *Boss) {
-	dmg := p.dmg - b.armor
-	if dmg <= 0 {
-		dmg = 1
-	}
-	b.hp -= dmg
-}
 
-func (b *Boss) attack(p *Player) {
-	dmg := b.dmg - p.armor
+func (c1 *Character) attack(c2 *Character) {
+	dmg := c1.dmg - c2.armor
 	if dmg <= 0 {
 		dmg = 1
 	}
-	p.hp -= dmg
+	c2.hp -= dmg
 }
