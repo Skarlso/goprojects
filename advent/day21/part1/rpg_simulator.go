@@ -97,7 +97,19 @@ func setupGame() {
 	boss = &Boss{hp: 103, dmg: 9, armor: 2}
 }
 
-func getItemCombinations() {
+func getWeaponsCombinations() {
+	// weaponCombinations := itertools.Combinations(shop.weapons, len(shop.weapons))
+}
+
+func getArmorCombinations() {
+
+}
+
+func getDefenseRingCombinations() {
+
+}
+
+func getAttackRingCombinations() {
 
 }
 
