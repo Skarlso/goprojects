@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"fmt"
 	"os"
 	"strconv"
 	"strings"
@@ -14,10 +15,11 @@ type Instruction struct {
 	offset   int
 }
 
+var registers = make(map[string]int, 0)
 var instructions = make([]Instruction, 0)
 
 func init() {
-	file, _ := os.Open("test_input.txt")
+	file, _ := os.Open("input.txt")
 	defer file.Close()
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
@@ -42,5 +44,35 @@ func init() {
 }
 
 func main() {
+	i := 0
+	for i < len(instructions) {
+		currentInst := instructions[i]
+		switch currentInst.inst {
+		case "jio":
+			if registers[currentInst.register] == 1 {
+				i += currentInst.offset
+			} else {
+				i++
+			}
+		case "jie":
+			if registers[currentInst.register]&1 == 0 {
+				i += currentInst.offset
+			} else {
+				i++
+			}
+		case "jmp":
+			i += currentInst.offset
+		case "tpl":
+			registers[currentInst.register] *= 3
+			i++
+		case "inc":
+			registers[currentInst.register]++
+			i++
+		case "hlf":
+			registers[currentInst.register] /= 2
+			i++
+		}
+	}
 
+	fmt.Println("Value of register b is:", registers["b"])
 }
