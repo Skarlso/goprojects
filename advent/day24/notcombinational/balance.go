@@ -31,6 +31,9 @@ func main() {
 	//I could start from the biggest number and if they give out the limit,
 	//just store the product and remove those numbers from the list and go on
 	//to the next numbers which give the same as LIMIT.
+	//Once we get a group which has the lowest count of member, we save that group.
+	//After that, any group which hits the limit, but has a higher member count is no longer relevant.
+	//If it has the same member count as our previous group, we compare the product instead.
 }
 
 func getQuantumEntanglement(in []int) int {
