@@ -44,6 +44,7 @@ func init() {
 }
 
 func main() {
+	registers["a"] = 1
 	i := 0
 	for i < len(instructions) {
 		currentInst := instructions[i]
