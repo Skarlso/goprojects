@@ -4,13 +4,16 @@ import (
 	"bytes"
 	"fmt"
 	"io/ioutil"
+	"math"
 	"strconv"
 	"strings"
 
-	"github.com/fighterlyt/permutation"
+	"github.com/ntns/goitertools/itertools"
+	"github.com/skarlso/goutils/arrayutils"
 )
 
-var presents []int
+// var presents = []int{1, 2, 3, 4, 5, 7, 8, 9, 10, 11}
+var presentGroups = make([][]int, 0)
 
 func main() {
 	content, err := ioutil.ReadFile("input.txt")
@@ -19,24 +22,54 @@ func main() {
 	}
 	content = bytes.TrimSpace(content)
 	presents := convertToIntSlice(strings.Split(string(content), "\n"))
+	presents = arrayutils.ReverseInt(presents)
+	//Part 1
+	// limit := sum(presents...) / 3
 
-	presentGroups, _ := permutation.NewPerm(presents, nil)
-	// fmt.Println(presentGroups)
-	for i, err := presentGroups.Next(); err == nil; i, err = presentGroups.Next() {
-		fmt.Println(i.([]int))
+	//Part 2
+	limit := sum(presents...) / 4
+
+	for i := 0; i < len(presents); i++ {
+		//My recursive permuation was simply not fast enough
+		presCombinations := itertools.Combinations(presents, i)
+		for _, v := range presCombinations {
+			if sum(v...) == limit {
+				presentGroups = append(presentGroups, v)
+			}
+
+		}
 	}
-	// presentGroups := itertools.Permutations(presents, len(presents))
-	// for _, v := range presentGroups {
-	// 	fmt.Println(v)
-	// }
+
+	var smallestPresentCountGroups [][]int
+	smallestPresentCount := math.MaxInt64
+	for _, v := range presentGroups {
+		if len(v) <= smallestPresentCount {
+			smallestPresentCount = len(v)
+			smallestPresentCountGroups = append(smallestPresentCountGroups, v)
+		}
+	}
+
+	if len(smallestPresentCountGroups) > 1 {
+		smallestQe := math.MaxInt64
+		for _, v := range smallestPresentCountGroups {
+			vQe := getQuantumEntanglement(v)
+			if vQe < smallestQe {
+				smallestQe = vQe
+			}
+		}
+		fmt.Println("Smallest qe", smallestQe)
+	} else {
+		fmt.Println("Smallest qe: ", getQuantumEntanglement(smallestPresentCountGroups[0]))
+	}
 }
 
-func getQuantumEntanglement(in []int) (qe int) {
+func getQuantumEntanglement(in []int) int {
+	qe := 1
 	for _, v := range in {
 		qe *= v
 	}
 
-	return
+	return qe
 }
 
 func convertToIntSlice(in []string) (out []int) {
@@ -46,4 +79,12 @@ func convertToIntSlice(in []string) (out []int) {
 	}
 
 	return
+}
+
+func sum(nums ...int) int {
+	sum := 0
+	for _, i := range nums {
+		sum += i
+	}
+	return sum
 }
