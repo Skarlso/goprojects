@@ -1,10 +1,12 @@
 package main
 
+import "github.com/skarlso/goprojects/advent/solutions"
+
 //
 func main() {
 	// solutions.MoveSanta()
 	// solutions.WrappingPaper()
-	// solutions.Mine()
+	solutions.Mine()
 	// solutions.NiceOrNaughty()
 	// solutions.TurnOnTheLightsV2()
 	// solutions.BobbyTable()
