@@ -42,6 +42,7 @@ func CalculateDistance() {
 	}
 	generatePermutation(keys, len(keys))
 	getMinDistances()
+	getMaxDistances()
 }
 
 func generatePermutation(s []string, n int) {
@@ -52,11 +53,15 @@ func generatePermutation(s []string, n int) {
 		news := make([]string, len(s))
 		copy(news, s)
 		routes = append(routes, news)
-	}
-	for i := 0; i < n; i++ {
-		s[i], s[n-1] = s[n-1], s[i]
-		generatePermutation(s, n-1)
-		s[i], s[n-1] = s[n-1], s[i]
+	} else {
+		for i := 0; i <= n; i++ {
+			generatePermutation(s, n-1)
+			if i|1 == 0 {
+				s[i], s[n-1] = s[n-1], s[i]
+			} else {
+				s[0], s[n-1] = s[n-1], s[0]
+			}
+		}
 	}
 }
 
@@ -76,6 +81,24 @@ func getMinDistances() {
 		}
 	}
 	fmt.Println("Minimum distance:", min)
+}
+
+func getMaxDistances() {
+	max := 0
+	for _, v := range routes {
+		dis := 0
+		for i := range v {
+			//Check if the next item is in the connections of the first item.
+			//If yes, retrieve its distance. That distance will be to THIS item.
+			if i+1 < len(v) {
+				dis += getDistanceForTargetConnect(v[i], v[i+1])
+			}
+		}
+		if dis >= max {
+			max = dis
+		}
+	}
+	fmt.Println("Max distance:", max)
 }
 
 func getDistanceForTargetConnect(name string, conn string) int {
