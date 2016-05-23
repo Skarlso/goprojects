@@ -1,20 +1,38 @@
 package main
 
-import "fmt"
+import (
+    "fmt"
+    "strings"
 
-var locations = []string{"London", "Dublin", "Belfast"}
+    "github.com/skarlso/goutils/arrayutils"
+)
 
-func permute(s []string, n int) {
-	if n == 1 {
-		fmt.Println(s)
-	}
-	for i := 0; i < n; i++ {
-		s[i], s[n-1] = s[n-1], s[i]
-		permute(s, n-1)
-		s[i], s[n-1] = s[n-1], s[i]
-	}
+var locations = []string{"1", "2", "3"}
+var permutations = make([]string, 0)
+
+func permute(s []string) {
+    for i := 0; i < fact(len(s)); i++ {
+        innerI := i % len(s)
+        for j := 0; j < len(s); j++ {
+            s[innerI], s[j] = s[j], s[innerI]
+            if !arrayutils.ContainsString(permutations, strings.Join(s, " ")) {
+                permutations = append(permutations, strings.Join(s, " "))
+            }
+        }
+    }
 }
 
-// func main() {
-// 	permute(locations, len(locations))
-// }
+func fact(n int) int {
+    if n == 1 {
+        return n
+    }
+    return n * fact(n-1)
+}
+
+func main() {
+    fmt.Println("Fact of locations:", fact(len(locations)))
+    permute(locations)
+    for _, v := range permutations {
+        fmt.Println(v)
+    }
+}

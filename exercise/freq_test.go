@@ -6,19 +6,19 @@ var data = "Writing good tests is not trivial, but in many situations a lot of g
 
 func BenchmarkLoopFrequencyCount(t *testing.B) {
 
-	for i := 0; i < t.N; i++ {
-		countLettersLoop(data)
-	}
+    for i := 0; i < t.N; i++ {
+        countLettersLoop(data)
+    }
 }
 
 func BenchmarkRecursiveFrequencyCount(t *testing.B) {
-	for i := 0; i < t.N; i++ {
-		countLettersRecursive(data)
-	}
+    for i := 0; i < t.N; i++ {
+        countLettersRecursive(data)
+    }
 }
 
 func BenchmarkNonTailRecursiveFrequencyCount(t *testing.B) {
-	for i := 0; i < t.N; i++ {
-		nonTailRecursiveCountLettersRecursive(data)
-	}
+    for i := 0; i < t.N; i++ {
+        nonTailRecursiveCountLettersRecursive(data)
+    }
 }
