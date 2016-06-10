@@ -29,10 +29,10 @@ func fact(n int) int {
     return n * fact(n-1)
 }
 
-func main() {
-    fmt.Println("Fact of locations:", fact(len(locations)))
-    permute(locations)
-    for _, v := range permutations {
-        fmt.Println(v)
-    }
-}
+//func main() {
+//    fmt.Println("Fact of locations:", fact(len(locations)))
+//    permute(locations)
+//    for _, v := range permutations {
+//        fmt.Println(v)
+//    }
+//}
