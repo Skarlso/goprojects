@@ -7,7 +7,7 @@ import (
     "github.com/skarlso/goutils/arrayutils"
 )
 
-var locations = []string{"1", "2", "3"}
+var locations = []string{"1", "2", "3", "4"}
 var permutations = make([]string, 0)
 
 func permute(s []string) {
