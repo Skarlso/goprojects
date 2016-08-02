@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/ntns/goitertools/itertools"
+	"github.com/Skarlso/goitertools/itertools"
 )
 
 //LIMIT the liter limit we are looking for

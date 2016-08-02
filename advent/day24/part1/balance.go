@@ -8,7 +8,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/ntns/goitertools/itertools"
+	"github.com/Skarlso/goitertools/itertools"
 	"github.com/skarlso/goutils/arrayutils"
 )
 

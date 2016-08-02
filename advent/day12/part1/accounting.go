@@ -8,7 +8,7 @@ import (
 
 func main() {
 	//420
-	fileContent, err := ioutil.ReadFile("smaller_input.txt")
+	fileContent, err := ioutil.ReadFile("input.txt")
 	if err != nil {
 		panic(err)
 	}
