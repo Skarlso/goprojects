@@ -1,3 +1,6 @@
 [submodule "gojira"]
     path = gitjira
     url = git://github.com/Skarlso/goprojects.git
+[submodule "advent"]
+    path = advent
+    url = git://github.com/Skarlso/goprojects.git
